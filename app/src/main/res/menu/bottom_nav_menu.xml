@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_order_dish"
+        android:icon="@mipmap/ic_order_dish_black"
+        android:title="点菜"/>
+
+    <item
+        android:id="@+id/navigation_order"
+        android:icon="@mipmap/ic_order_black"
+        android:title="订单"/>
+
+</menu>

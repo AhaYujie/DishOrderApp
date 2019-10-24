@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    
+    <data>
+        
+        <variable
+            name="dishItemViewModel"
+            type="com.aha.dishordersystem.ui.order_dish.OrderDishDishesItemViewModel" />
+        
+    </data>
+
+
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/order_dish_dish_image"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/tmp_dish"/>
+
+            <TextView
+                android:id="@+id/order_dish_dish_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/order_dish_dish_image"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:text="金牌虾饺皇"/>
+
+            <TextView
+                android:id="@+id/order_dish_dish_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/order_dish_dish_name"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:maxEms="15"
+                android:ellipsize="end"
+                android:textSize="13sp"
+                android:textColor="@color/gray"
+                android:text="这是非常美味的虾饺, 你吃你知道, 我知道哈哈"/>
+
+            <ImageView
+                android:id="@+id/order_dish_money_icon"
+                android:layout_below="@+id/order_dish_dish_detail"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/ic_money_red"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+    
+</layout>

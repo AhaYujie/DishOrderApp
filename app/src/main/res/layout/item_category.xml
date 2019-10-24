@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="categoryItemViewModel"
+            type="com.aha.dishordersystem.ui.order_dish.OrderDishCategoryItemViewModel" />
+
+    </data>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:binding="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        binding:onClickCommand="@{categoryItemViewModel.categoryItemClick}">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@{categoryItemViewModel.categoryTextColor}"
+                android:text="@{categoryItemViewModel.categoryName}"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimary"
+                android:visibility="@{categoryItemViewModel.selectLineFlagVisibility}"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>
