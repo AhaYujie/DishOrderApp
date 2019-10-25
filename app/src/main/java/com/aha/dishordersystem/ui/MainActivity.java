@@ -1,15 +1,13 @@
 package com.aha.dishordersystem.ui;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.aha.dishordersystem.MyApplication;
+import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
 import com.aha.dishordersystem.databinding.ActivityMainBinding;
 import com.aha.dishordersystem.ui.history_order.HistoryOrderFragment;
@@ -19,7 +17,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.goldze.mvvmhabit.BR;
 import me.goldze.mvvmhabit.base.BaseActivity;
 import me.goldze.mvvmhabit.base.BaseViewModel;
 

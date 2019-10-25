@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <litepal>
     <dbname value="dish_order_system"/>
-    <version value="1"/>
+    <version value="7"/>
     <list>
-        <mapping class="com.aha.dishordersystem.data.model.dish.Dish"/>
-        <mapping class="com.aha.dishordersystem.data.model.dish.Category"/>
-        <mapping class="com.aha.dishordersystem.data.model.order.Order"/>
-        <mapping class="com.aha.dishordersystem.data.model.order.OrderDish"/>
+        <mapping class="com.aha.dishordersystem.data.db.model.dish.Dish"/>
+        <mapping class="com.aha.dishordersystem.data.db.model.dish.DishCategory"/>
+        <mapping class="com.aha.dishordersystem.data.db.model.order.HistoryOrder"/>
+        <mapping class="com.aha.dishordersystem.data.db.model.order.OrderDish"/>
     </list>
 </litepal>

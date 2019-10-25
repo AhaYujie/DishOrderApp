@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
+import com.aha.dishordersystem.app.MyViewModelFactory;
 import com.aha.dishordersystem.databinding.FragmentOrderDishBinding;
 
 import me.goldze.mvvmhabit.base.BaseFragment;
@@ -48,6 +51,12 @@ public class OrderDishFragment extends BaseFragment<FragmentOrderDishBinding, Or
     }
 
     @Override
+    public OrderDishViewModel initViewModel() {
+        MyViewModelFactory myViewModelFactory = MyViewModelFactory.getInstance(getActivity().getApplication());
+        return ViewModelProviders.of(this, myViewModelFactory).get(OrderDishViewModel.class);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         categoryRecyclerView = view.findViewById(R.id.order_dish_category_recyclerview);
@@ -56,13 +65,14 @@ public class OrderDishFragment extends BaseFragment<FragmentOrderDishBinding, Or
     @Override
     public void initViewObservable() {
         // 监听选择类别
-        viewModel.getSelectChangeObservable().observe(this, new Observer<OrderDishCategoryItemViewModel>() {
+        viewModel.getSelectChangeObservable().observe(this,
+                new Observer<OrderDishCategoryItemViewModel>() {
             @Override
             public void onChanged(OrderDishCategoryItemViewModel orderDishCategoryItemViewModel) {
                 for (OrderDishCategoryItemViewModel orderDishCategoryItemViewModel1:
                     viewModel.categoryItemViewModels) {
                     orderDishCategoryItemViewModel1.categoryTextColor.set(Color.GRAY);
-                    orderDishCategoryItemViewModel1.selectLineFlagVisibility.set(View.INVISIBLE);
+                    orderDishCategoryItemViewModel1.selectLineFlagVisibility.set(View.GONE);
                 }
                 orderDishCategoryItemViewModel.categoryTextColor.set(getResources().getColor(R.color.colorPrimary));
                 orderDishCategoryItemViewModel.selectLineFlagVisibility.set(View.VISIBLE);
@@ -70,6 +80,9 @@ public class OrderDishFragment extends BaseFragment<FragmentOrderDishBinding, Or
                         (viewModel.getCategoryItemPosition(orderDishCategoryItemViewModel));
             }
         });
+
+
+
     }
 }
 

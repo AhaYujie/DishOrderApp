@@ -2,6 +2,8 @@
 <layout>
     
     <data>
+
+        <import type="com.aha.dishordersystem.R" />
         
         <variable
             name="dishItemViewModel"
@@ -9,16 +11,15 @@
         
     </data>
 
-
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:binding="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:layout_margin="5dp"
         app:cardCornerRadius="5dp"
-        app:cardElevation="5dp"
         android:background="@color/white">
 
         <RelativeLayout
@@ -30,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/tmp_dish"/>
+                binding:url="@{dishItemViewModel.dishImageUrl}"
+                binding:placeholderRes="@{R.mipmap.ic_pic_loading}"/>
 
             <TextView
                 android:id="@+id/order_dish_dish_name"
@@ -39,9 +41,13 @@
                 android:layout_below="@+id/order_dish_dish_image"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:maxLines="1"
+                android:maxEms="12"
+                android:ellipsize="end"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:text="金牌虾饺皇"/>
+                android:text="@{dishItemViewModel.dishName}"/>
 
             <TextView
                 android:id="@+id/order_dish_dish_detail"
@@ -50,21 +56,77 @@
                 android:layout_below="@+id/order_dish_dish_name"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:maxLines="1"
                 android:maxEms="15"
                 android:ellipsize="end"
                 android:textSize="13sp"
                 android:textColor="@color/gray"
-                android:text="这是非常美味的虾饺, 你吃你知道, 我知道哈哈"/>
+                android:text="@{dishItemViewModel.dishDetail}"/>
 
-            <ImageView
-                android:id="@+id/order_dish_money_icon"
+            <LinearLayout
                 android:layout_below="@+id/order_dish_dish_detail"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/ic_money_red"/>
+                android:layout_marginStart="10dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/order_dish_money_icon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/ic_money_red"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/red"
+                    android:text="@{dishItemViewModel.dishPrice}"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_below="@+id/order_dish_dish_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/order_dish_reduce_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_delete_blue"
+                    android:visibility="@{dishItemViewModel.reduceIconVisibility}"/>
+
+                <TextView
+                    android:id="@+id/order_dish_dish_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:text="@{dishItemViewModel.dishNumber}"
+                    android:visibility="@{dishItemViewModel.dishNumberVisibility}"/>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:src="@mipmap/ic_add_blue"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 

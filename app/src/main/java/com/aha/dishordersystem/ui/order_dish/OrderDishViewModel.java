@@ -1,7 +1,7 @@
 package com.aha.dishordersystem.ui.order_dish;
 
 import android.app.Application;
-import android.view.View;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
@@ -9,12 +9,21 @@ import androidx.databinding.ObservableList;
 
 import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
+import com.aha.dishordersystem.app.MyApplication;
+import com.aha.dishordersystem.data.DataRepository;
+import com.aha.dishordersystem.data.db.model.dish.DishCategory;
+import com.aha.dishordersystem.data.db.model.dish.Dish;
+
+import org.litepal.LitePal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.goldze.mvvmhabit.base.BaseViewModel;
 import me.goldze.mvvmhabit.bus.event.SingleLiveEvent;
 import me.tatarka.bindingcollectionadapter2.ItemBinding;
 
-public class OrderDishViewModel extends BaseViewModel {
+public class OrderDishViewModel extends BaseViewModel<DataRepository> {
 
     public ObservableList<OrderDishCategoryItemViewModel> categoryItemViewModels
             = new ObservableArrayList<>();
@@ -31,8 +40,8 @@ public class OrderDishViewModel extends BaseViewModel {
     private SingleLiveEvent<OrderDishCategoryItemViewModel> selectChangeObservable =
             new SingleLiveEvent<>();
 
-    public OrderDishViewModel(@NonNull Application application) {
-        super(application);
+    public OrderDishViewModel(@NonNull Application application, DataRepository dataRepository) {
+        super(application, dataRepository);
         for (int i = 0; i < 5; i++) {
             if (i == 0) {
                 OrderDishCategoryItemViewModel categoryItemViewModel =

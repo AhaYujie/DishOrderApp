@@ -22,7 +22,10 @@ import javax.net.ssl.X509TrustManager;
 
 import me.goldze.mvvmhabit.utils.KLog;
 
-public class HttpUtils {
+
+public class HttpsUtils {
+
+    public static final String TOKEN = "aha";
 
     public static class SSLParams {
         public SSLSocketFactory sSLSocketFactory;

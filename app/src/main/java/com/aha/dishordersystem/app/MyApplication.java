@@ -1,8 +1,15 @@
-package com.aha.dishordersystem;
+package com.aha.dishordersystem.app;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.aha.dishordersystem.BuildConfig;
+import com.aha.dishordersystem.R;
 
 import org.litepal.LitePal;
 
 import me.goldze.mvvmhabit.base.BaseApplication;
+import me.goldze.mvvmhabit.crash.CaocConfig;
 import me.goldze.mvvmhabit.utils.KLog;
 
 public class MyApplication extends BaseApplication {
@@ -20,4 +27,5 @@ public class MyApplication extends BaseApplication {
     public static String getTAG() {
         return TAG;
     }
+
 }

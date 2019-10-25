@@ -1,14 +1,16 @@
-package com.aha.dishordersystem.data.model.order;
+package com.aha.dishordersystem.data.db.model.order;
 
 import org.litepal.annotation.Column;
+import org.litepal.crud.LitePalSupport;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * 订单
  */
-public class Order {
+public class HistoryOrder extends LitePalSupport {
 
     @Column(nullable = false)
     private Date orderCreateTime;
@@ -23,7 +25,7 @@ public class Order {
     private double orderTotalPrice;
 
     @Column(nullable = false)
-    private List<OrderDish> orderDishes;
+    private List<OrderDish> orderDishes = new ArrayList<>();
 
     public Date getOrderCreateTime() {
         return orderCreateTime;

@@ -2,8 +2,10 @@ package com.aha.dishordersystem.util;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.aha.dishordersystem.BuildConfig;
+import com.aha.dishordersystem.app.MyApplication;
 
 import java.io.File;
 import java.util.Map;
@@ -30,6 +32,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
+ * Created by goldze on 2017/5/10.
  * RetrofitClient封装单例类, 实现网络请求
  */
 public class RetrofitClient {
@@ -38,7 +41,7 @@ public class RetrofitClient {
     //缓存时间
     private static final int CACHE_TIMEOUT = 10 * 1024 * 1024;
     //服务端根路径
-    public static String baseUrl = "http://101.132.131.12/";
+    public static String baseUrl = "https://www.oschina.net/";
 
     private static Context mContext = Utils.getContext();
 
@@ -61,6 +64,7 @@ public class RetrofitClient {
     }
 
     private RetrofitClient(String url, Map<String, String> headers) {
+        System.out.println(mContext);
 
         if (TextUtils.isEmpty(url)) {
             url = baseUrl;
@@ -77,7 +81,7 @@ public class RetrofitClient {
         } catch (Exception e) {
             KLog.e("Could not create http cache", e);
         }
-        HttpUtils.SSLParams sslParams = HttpUtils.getSslSocketFactory();
+        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory();
         okHttpClient = new OkHttpClient.Builder()
                 .cookieJar(new CookieJarImpl(new PersistentCookieStore(mContext)))
 //                .cache(cache)
