@@ -20,20 +20,37 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp">
 
             <TextView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:background="@mipmap/ic_circle_red"
+                android:layout_gravity="right"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:text="@{categoryItemViewModel.orderDishNumber}"
+                android:visibility="@{categoryItemViewModel.orderDishNumberVisibility}"/>
+
+            <TextView
+                android:id="@+id/dish_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:textSize="17sp"
                 android:textColor="@{categoryItemViewModel.categoryTextColor}"
                 android:text="@{categoryItemViewModel.categoryName}"/>
 
             <View
+                android:id="@+id/dish_category_bottom_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:background="@color/colorPrimary"
                 android:visibility="@{categoryItemViewModel.selectLineFlagVisibility}"/>

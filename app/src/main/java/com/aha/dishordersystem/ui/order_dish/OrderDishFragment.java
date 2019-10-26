@@ -70,12 +70,12 @@ public class OrderDishFragment extends BaseFragment<FragmentOrderDishBinding, Or
             @Override
             public void onChanged(OrderDishCategoryItemViewModel orderDishCategoryItemViewModel) {
                 for (OrderDishCategoryItemViewModel orderDishCategoryItemViewModel1:
-                    viewModel.categoryItemViewModels) {
-                    orderDishCategoryItemViewModel1.categoryTextColor.set(Color.GRAY);
-                    orderDishCategoryItemViewModel1.selectLineFlagVisibility.set(View.GONE);
+                    viewModel.getCategoryItemViewModels()) {
+                    orderDishCategoryItemViewModel1.getCategoryTextColor().set(Color.GRAY);
+                    orderDishCategoryItemViewModel1.getSelectLineFlagVisibility().set(View.INVISIBLE);
                 }
-                orderDishCategoryItemViewModel.categoryTextColor.set(getResources().getColor(R.color.colorPrimary));
-                orderDishCategoryItemViewModel.selectLineFlagVisibility.set(View.VISIBLE);
+                orderDishCategoryItemViewModel.getCategoryTextColor().set(getResources().getColor(R.color.colorPrimary));
+                orderDishCategoryItemViewModel.getSelectLineFlagVisibility().set(View.VISIBLE);
                 categoryRecyclerView.smoothScrollToPosition
                         (viewModel.getCategoryItemPosition(orderDishCategoryItemViewModel));
             }

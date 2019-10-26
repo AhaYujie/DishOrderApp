@@ -2,9 +2,11 @@ package com.aha.dishordersystem.ui.order_dish;
 
 import android.app.Application;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableList;
 
 import com.aha.dishordersystem.BR;
@@ -16,6 +18,7 @@ import com.aha.dishordersystem.data.db.model.dish.Dish;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.data.db.model.order.OrderDish;
 import com.aha.dishordersystem.data.network.json.DishListJson;
+import com.aha.dishordersystem.ui.dish_detail.DishDetailFragment;
 import com.aha.dishordersystem.util.JsonUtils;
 
 import org.litepal.LitePal;
@@ -35,18 +38,18 @@ import me.tatarka.bindingcollectionadapter2.ItemBinding;
 
 public class OrderDishViewModel extends BaseViewModel<DataRepository> {
 
-    private DishListJson dishListJson = null;
+    private ObservableField<Integer> floatingButtonVisibility = new ObservableField<>(View.INVISIBLE);
 
-    public ObservableList<OrderDishCategoryItemViewModel> categoryItemViewModels
+    private ObservableList<OrderDishCategoryItemViewModel> categoryItemViewModels
             = new ObservableArrayList<>();
 
-    public ItemBinding<OrderDishCategoryItemViewModel> categoryItemBinding
+    private ItemBinding<OrderDishCategoryItemViewModel> categoryItemBinding
             = ItemBinding.of(BR.categoryItemViewModel, R.layout.item_category);
 
-    public ObservableList<OrderDishDishesItemViewModel> dishesItemViewModels
+    private ObservableList<OrderDishDishesItemViewModel> dishesItemViewModels
             = new ObservableArrayList<>();
 
-    public ItemBinding<OrderDishDishesItemViewModel> dishesItemBinding
+    private ItemBinding<OrderDishDishesItemViewModel> dishesItemBinding
             = ItemBinding.of(BR.dishItemViewModel, R.layout.item_dish);
 
     private SingleLiveEvent<OrderDishCategoryItemViewModel> selectChangeObservable =
@@ -123,36 +126,36 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
 //                        Log.d(MyApplication.getTAG(), "error: " + throwable.getMessage());
 //                    }
 //                });
-        model.getAllDishes()
-                .compose(RxUtils.schedulersTransformer())
-                .doOnSubscribe(OrderDishViewModel.this)
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        Log.d(MyApplication.getTAG(), "正在加载");
-                        ToastUtils.showShort("正在加载");
-                    }
-                })
-                .subscribe(new Consumer<DishListJson>() {
-                    @Override
-                    public void accept(DishListJson dishListJson) throws Exception {
-                        List<DishCategory> dishCategories = JsonUtils.dishListJsonToDishCategories(dishListJson);
-                        Log.d(MyApplication.getTAG(), "accept: " + dishListJson.getStatus());
-                        Log.d(MyApplication.getTAG(), "accept: " + dishCategories);
-                        model.saveDishToDB(dishListJson);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.d(MyApplication.getTAG(), "error:" + throwable);
-                        throwable.printStackTrace();
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        Log.d(MyApplication.getTAG(), "finish");
-                    }
-                });
+//        model.getAllDishes()
+//                .compose(RxUtils.schedulersTransformer())
+//                .doOnSubscribe(OrderDishViewModel.this)
+//                .doOnSubscribe(new Consumer<Disposable>() {
+//                    @Override
+//                    public void accept(Disposable disposable) throws Exception {
+//                        Log.d(MyApplication.getTAG(), "正在加载");
+//                        ToastUtils.showShort("正在加载");
+//                    }
+//                })
+//                .subscribe(new Consumer<DishListJson>() {
+//                    @Override
+//                    public void accept(DishListJson dishListJson) throws Exception {
+//                        List<DishCategory> dishCategories = JsonUtils.dishListJsonToDishCategories(dishListJson);
+//                        Log.d(MyApplication.getTAG(), "accept: " + dishListJson.getStatus());
+//                        Log.d(MyApplication.getTAG(), "accept: " + dishCategories);
+//                        model.saveDishToDB(dishListJson);
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                        Log.d(MyApplication.getTAG(), "error:" + throwable);
+//                        throwable.printStackTrace();
+//                    }
+//                }, new Action() {
+//                    @Override
+//                    public void run() throws Exception {
+//                        Log.d(MyApplication.getTAG(), "finish");
+//                    }
+//                });
 
 
 
@@ -171,4 +174,23 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
         return categoryItemViewModels.indexOf(orderDishCategoryItemViewModel);
     }
 
+    public ObservableField<Integer> getFloatingButtonVisibility() {
+        return floatingButtonVisibility;
+    }
+
+    public ObservableList<OrderDishCategoryItemViewModel> getCategoryItemViewModels() {
+        return categoryItemViewModels;
+    }
+
+    public ItemBinding<OrderDishCategoryItemViewModel> getCategoryItemBinding() {
+        return categoryItemBinding;
+    }
+
+    public ObservableList<OrderDishDishesItemViewModel> getDishesItemViewModels() {
+        return dishesItemViewModels;
+    }
+
+    public ItemBinding<OrderDishDishesItemViewModel> getDishesItemBinding() {
+        return dishesItemBinding;
+    }
 }

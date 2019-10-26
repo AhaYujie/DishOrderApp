@@ -20,7 +20,8 @@
         android:layout_height="220dp"
         android:layout_margin="5dp"
         app:cardCornerRadius="5dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        binding:onClickCommand="@{dishItemViewModel.dishItemClick}">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -103,10 +104,11 @@
 
                 <ImageView
                     android:id="@+id/order_dish_reduce_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/ic_delete_blue"
-                    android:visibility="@{dishItemViewModel.reduceIconVisibility}"/>
+                    android:visibility="@{dishItemViewModel.reduceIconVisibility}"
+                    binding:onClickCommand="@{dishItemViewModel.reduceButtonClick}"/>
 
                 <TextView
                     android:id="@+id/order_dish_dish_number"
@@ -120,11 +122,12 @@
                     android:visibility="@{dishItemViewModel.dishNumberVisibility}"/>
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
-                    android:src="@mipmap/ic_add_blue"/>
+                    android:src="@mipmap/ic_add_blue"
+                    binding:onClickCommand="@{dishItemViewModel.addButtonClick}"/>
 
             </LinearLayout>
 

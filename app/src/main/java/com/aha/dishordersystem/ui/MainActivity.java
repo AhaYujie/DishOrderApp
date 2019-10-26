@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
 import com.aha.dishordersystem.databinding.ActivityMainBinding;
+import com.aha.dishordersystem.ui.dish_detail.DishDetailFragment;
 import com.aha.dishordersystem.ui.history_order.HistoryOrderFragment;
 import com.aha.dishordersystem.ui.order_dish.OrderDishFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -51,6 +52,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, BaseViewMode
         initFragment();
         // 初始化底部导航栏
         initBottomNav();
+        startContainerActivity(DishDetailFragment.class.getCanonicalName());
     }
 
     private void initFragment() {
