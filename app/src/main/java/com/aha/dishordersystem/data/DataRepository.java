@@ -5,17 +5,18 @@ import androidx.annotation.VisibleForTesting;
 
 import com.aha.dishordersystem.data.db.model.dish.DishCategory;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
-import com.aha.dishordersystem.data.network.json.DishByIdJson;
+import com.aha.dishordersystem.data.dish_data_source.DishDataSource;
 import com.aha.dishordersystem.data.network.json.DishJson;
 import com.aha.dishordersystem.data.network.json.DishListJson;
 import com.aha.dishordersystem.data.network.json.PayOrderJson;
+import com.aha.dishordersystem.data.order_data_source.OrderDataSource;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import me.goldze.mvvmhabit.base.BaseModel;
 
-public class DataRepository extends BaseModel implements DishDataSource, OrderDataSource{
+public class DataRepository extends BaseModel implements DishDataSource, OrderDataSource {
 
     private static volatile DataRepository INSTANCE = null;
 
@@ -46,13 +47,13 @@ public class DataRepository extends BaseModel implements DishDataSource, OrderDa
     }
 
     /**
-     * 从本地数据库获取全部菜
+     * 获取全部菜
      *
      * @return
      */
     @Override
-    public List<DishCategory> getAllDishesFromLocal() {
-        return dishDataSource.getAllDishesFromLocal();
+    public Observable<DishListJson> getAllDishes() {
+        return dishDataSource.getAllDishes();
     }
 
     /**
@@ -68,42 +69,21 @@ public class DataRepository extends BaseModel implements DishDataSource, OrderDa
     /**
      * 存储菜到本地数据库
      *
-     * @param dishCategory
+     * @param dishListJson
      */
     @Override
-    public void saveDishToDB(DishCategory dishCategory) {
-        dishDataSource.saveDishToDB(dishCategory);
+    public void saveDishToDB(DishListJson dishListJson) {
+        dishDataSource.saveDishToDB(dishListJson);
     }
 
     /**
-     * 从服务器获取菜单列表
+     * 获取全部订单
      *
      * @return
      */
     @Override
-    public Observable<DishListJson> getDishListFromServer() {
-        return dishDataSource.getDishListFromServer();
-    }
-
-    /**
-     * 从服务器按照id获取菜单
-     *
-     * @param idList
-     * @return
-     */
-    @Override
-    public Observable<DishByIdJson> getDishByIdFromServer(List<Integer> idList) {
-        return dishDataSource.getDishByIdFromServer(idList);
-    }
-
-    /**
-     * 从本地数据库获取全部订单
-     *
-     * @return
-     */
-    @Override
-    public List<HistoryOrder> getAllOrdersFromLocal() {
-        return orderDataSource.getAllOrdersFromLocal();
+    public Observable<List<HistoryOrder>> getAllOrders() {
+        return orderDataSource.getAllOrders();
     }
 
     /**

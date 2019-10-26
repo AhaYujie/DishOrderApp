@@ -1,5 +1,7 @@
 package com.aha.dishordersystem.data.db.model.order;
 
+import androidx.annotation.NonNull;
+
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
@@ -65,5 +67,15 @@ public class HistoryOrder extends LitePalSupport {
 
     public void setOrderDishes(List<OrderDish> orderDishes) {
         this.orderDishes = orderDishes;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "orderCreateTime: " + orderCreateTime + ", " +
+                "orderIsFinish: " + orderIsFinish + ", " +
+                "orderDishNumber: " + orderDishNumber + ", " +
+                "orderTotalPrice: " + orderTotalPrice + ", " +
+                "orderDishes: " + orderDishes;
     }
 }

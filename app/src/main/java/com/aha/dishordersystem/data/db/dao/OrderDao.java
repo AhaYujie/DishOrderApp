@@ -1,5 +1,9 @@
 package com.aha.dishordersystem.data.db.dao;
 
+import android.util.Log;
+
+import com.aha.dishordersystem.app.MyApplication;
+import com.aha.dishordersystem.data.db.model.dish.Dish;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.data.db.model.order.OrderDish;
 
@@ -15,17 +19,18 @@ public class OrderDao {
      * @return
      */
     public static List<HistoryOrder> getAllOrders() {
-        return LitePal.findAll(HistoryOrder.class);
-    }
-
-    /**
-     * 存储订单到数据库
-     * @param historyOrders
-     */
-    public static void save(List<HistoryOrder> historyOrders) {
+        List<HistoryOrder> historyOrders = LitePal.findAll(HistoryOrder.class, true);
         for (HistoryOrder historyOrder : historyOrders) {
-            save(historyOrder);
+            List<OrderDish> orderDishes = new ArrayList<>();
+            for (OrderDish orderDish : historyOrder.getOrderDishes()) {
+                Dish dish = LitePal.where("serverId = ?", String.valueOf(orderDish.getDishServerId()))
+                                   .findFirst(Dish.class);
+                orderDish.setDish(dish);
+                orderDishes.add(orderDish);
+            }
+            historyOrder.setOrderDishes(orderDishes);
         }
+        return historyOrders;
     }
 
     /**
@@ -33,10 +38,32 @@ public class OrderDao {
      * @param historyOrder
      */
     public static void save(HistoryOrder historyOrder) {
-        List<OrderDish> orderDishes = new ArrayList<>(historyOrder.getOrderDishes());
-        LitePal.saveAll(orderDishes);
-        historyOrder.setOrderDishes(orderDishes);
-        historyOrder.save();
+        try {
+            List<OrderDish> orderDishes = new ArrayList<>(historyOrder.getOrderDishes());
+            for (OrderDish orderDish : orderDishes) {
+                save(orderDish);
+            }
+            historyOrder.setOrderDishes(orderDishes);
+            historyOrder.save();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void save(OrderDish orderDish) {
+        try {
+            orderDish.save();
+            Dish dish = LitePal.where("serverId = ?", String.valueOf(orderDish.getDishServerId()))
+                                .findFirst(Dish.class);
+            if (dish != null) {
+                orderDish.setDish(dish);
+                orderDish.save();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

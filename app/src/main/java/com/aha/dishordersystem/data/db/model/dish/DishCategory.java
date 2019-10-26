@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class DishCategory extends LitePalSupport {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String categoryName;
 
     @Column(nullable = false)

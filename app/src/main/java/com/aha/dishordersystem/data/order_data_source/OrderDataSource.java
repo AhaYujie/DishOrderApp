@@ -1,4 +1,4 @@
-package com.aha.dishordersystem.data;
+package com.aha.dishordersystem.data.order_data_source;
 
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.data.network.json.DishJson;
@@ -11,10 +11,10 @@ import io.reactivex.Observable;
 public interface OrderDataSource {
 
     /**
-     * 从本地数据库获取全部订单
+     * 获取全部订单
      * @return
      */
-    List<HistoryOrder> getAllOrdersFromLocal();
+    Observable<List<HistoryOrder>> getAllOrders();
 
     /**
      * 存储订单到本地数据库

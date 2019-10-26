@@ -1,4 +1,4 @@
-package com.aha.dishordersystem.data;
+package com.aha.dishordersystem.data.dish_data_source;
 
 import com.aha.dishordersystem.data.db.model.dish.DishCategory;
 import com.aha.dishordersystem.data.network.json.DishByIdJson;
@@ -11,10 +11,10 @@ import io.reactivex.Observable;
 public interface DishDataSource {
 
     /**
-     * 从本地数据库获取全部菜
+     * 获取全部菜
      * @return
      */
-    List<DishCategory> getAllDishesFromLocal();
+    Observable<DishListJson> getAllDishes();
 
     /**
      * 存储菜到本地数据库
@@ -24,21 +24,8 @@ public interface DishDataSource {
 
     /**
      * 存储菜到本地数据库
-     * @param dishCategory
+     * @param dishListJson
      */
-    void saveDishToDB(DishCategory dishCategory);
-
-    /**
-     * 从服务器获取菜单列表
-     * @return
-     */
-    Observable<DishListJson> getDishListFromServer();
-
-    /**
-     * 从服务器按照id获取菜单
-     * @param idList
-     * @return
-     */
-    Observable<DishByIdJson> getDishByIdFromServer(List<Integer> idList);
+    void saveDishToDB(DishListJson dishListJson);
 
 }

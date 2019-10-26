@@ -1,10 +1,10 @@
 package com.aha.dishordersystem.app;
 
 import com.aha.dishordersystem.data.DataRepository;
-import com.aha.dishordersystem.data.DishDataSource;
-import com.aha.dishordersystem.data.DishDataSourceImpl;
-import com.aha.dishordersystem.data.OrderDataSource;
-import com.aha.dishordersystem.data.OrderDataSourceImpl;
+import com.aha.dishordersystem.data.dish_data_source.DishDataSource;
+import com.aha.dishordersystem.data.dish_data_source.DishDataSourceImpl;
+import com.aha.dishordersystem.data.order_data_source.OrderDataSource;
+import com.aha.dishordersystem.data.order_data_source.OrderDataSourceImpl;
 import com.aha.dishordersystem.data.network.api.DishService;
 import com.aha.dishordersystem.data.network.api.OrderService;
 import com.aha.dishordersystem.util.RetrofitClient;

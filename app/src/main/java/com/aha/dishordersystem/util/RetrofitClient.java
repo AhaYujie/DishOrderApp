@@ -41,7 +41,7 @@ public class RetrofitClient {
     //缓存时间
     private static final int CACHE_TIMEOUT = 10 * 1024 * 1024;
     //服务端根路径
-    public static String baseUrl = "https://www.oschina.net/";
+    public static String baseUrl = "http://101.132.131.12:5000/";
 
     private static Context mContext = Utils.getContext();
 
@@ -84,7 +84,7 @@ public class RetrofitClient {
         HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory();
         okHttpClient = new OkHttpClient.Builder()
                 .cookieJar(new CookieJarImpl(new PersistentCookieStore(mContext)))
-//                .cache(cache)
+                .cache(cache)
                 .addInterceptor(new BaseInterceptor(headers))
                 .addInterceptor(new CacheInterceptor(mContext))
                 .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)

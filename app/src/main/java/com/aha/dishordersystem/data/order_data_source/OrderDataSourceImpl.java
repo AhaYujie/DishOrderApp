@@ -1,4 +1,4 @@
-package com.aha.dishordersystem.data;
+package com.aha.dishordersystem.data.order_data_source;
 
 import com.aha.dishordersystem.data.db.dao.OrderDao;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
@@ -10,6 +10,8 @@ import com.aha.dishordersystem.util.HttpsUtils;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 
 public class OrderDataSourceImpl implements OrderDataSource {
 
@@ -37,14 +39,30 @@ public class OrderDataSourceImpl implements OrderDataSource {
     }
 
     /**
-     * 从本地数据库获取全部订单
+     * 获取全部订单
      *
      * @return
      */
     @Override
-    public List<HistoryOrder> getAllOrdersFromLocal() {
-        return OrderDao.getAllOrders();
+    public Observable<List<HistoryOrder>> getAllOrders() {
+        return Observable.create(new ObservableOnSubscribe<List<HistoryOrder>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<HistoryOrder>> emitter) throws Exception {
+                try {
+                    List<HistoryOrder> historyOrders = OrderDao.getAllOrders();
+                    emitter.onNext(historyOrders);
+                }
+                catch (Exception e) {
+                    emitter.onError(e);
+                    e.printStackTrace();
+                }
+                finally {
+                    emitter.onComplete();
+                }
+            }
+        });
     }
+
 
     /**
      * 存储订单到本地数据库
@@ -53,7 +71,9 @@ public class OrderDataSourceImpl implements OrderDataSource {
      */
     @Override
     public void saveOrderToDB(List<HistoryOrder> historyOrders) {
-        OrderDao.save(historyOrders);
+        for (HistoryOrder historyOrder : historyOrders) {
+            saveOrderToDB(historyOrder);
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <litepal>
     <dbname value="dish_order_system"/>
-    <version value="7"/>
+    <version value="10"/>
     <list>
         <mapping class="com.aha.dishordersystem.data.db.model.dish.Dish"/>
         <mapping class="com.aha.dishordersystem.data.db.model.dish.DishCategory"/>

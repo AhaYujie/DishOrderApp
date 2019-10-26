@@ -10,6 +10,7 @@ import org.litepal.crud.LitePalSupport;
  */
 public class Dish extends LitePalSupport {
 
+    @Column(unique = true)
     private int serverId;   // 服务器数据库id
 
     @Column(nullable = false)

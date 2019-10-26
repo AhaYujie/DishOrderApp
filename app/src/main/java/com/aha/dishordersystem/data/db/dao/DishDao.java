@@ -39,10 +39,36 @@ public class DishDao {
      * @param dishCategory
      */
     public static void save(DishCategory dishCategory) {
-        List<Dish> dishList = new ArrayList<>(dishCategory.getDishes());
-        LitePal.saveAll(dishList);
-        dishCategory.setDishes(dishList);
-        dishCategory.save();
+        try {
+            DishCategory dishCategoryFound = LitePal.where("categoryName = ?", dishCategory.getCategoryName()).findFirst(DishCategory.class);
+            if (dishCategoryFound == null) {
+                List<Dish> dishList = new ArrayList<>(dishCategory.getDishes());
+                for (Dish dish : dishList) {
+                    save(dish);
+                }
+                dishCategory.setDishes(dishList);
+                dishCategory.save();
+            }
+            else {
+                List<Dish> dishList = new ArrayList<>(dishCategory.getDishes());
+                for (Dish dish : dishList) {
+                    dish.setDishCategory(dishCategoryFound);
+                    save(dish);
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void save(Dish dish) {
+        try {
+            dish.save();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

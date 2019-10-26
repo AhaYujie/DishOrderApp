@@ -6,6 +6,10 @@ import java.util.List;
 
 public class DishListJson {
 
+    public static final int STATUS_ERROR = 0;
+
+    public static final int STATUS_SUCCESS = 1;
+
     private int status;
 
     @SerializedName("dish_categories")
