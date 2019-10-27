@@ -7,12 +7,20 @@ import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 
 import com.aha.dishordersystem.app.MyApplication;
+import com.aha.dishordersystem.data.db.model.dish.Dish;
+import com.aha.dishordersystem.data.db.model.order.OrderDish;
+import com.aha.dishordersystem.ui.order_dish.dish_detail.DishDetailFragment;
+import com.aha.dishordersystem.ui.order_dish.dish_detail.DishDetailViewModel;
 
 import me.goldze.mvvmhabit.base.ItemViewModel;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
+import me.goldze.mvvmhabit.binding.command.BindingConsumer;
+import me.goldze.mvvmhabit.bus.Messenger;
 
 public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewModel> {
+
+    private int dishServerId;
 
     private ObservableField<String> dishImageUrl;
 
@@ -22,7 +30,7 @@ public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewMod
 
     private ObservableField<String> dishPrice;
 
-    private ObservableField<String> dishNumber;
+    private ObservableField<String> orderDishNumber;
 
     private ObservableField<Integer> reduceIconVisibility;
 
@@ -31,36 +39,85 @@ public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewMod
     private BindingCommand dishItemClick = new BindingCommand(new BindingAction() {
         @Override
         public void call() {
-            // TODO:click dish item
+            // click dish item
             Log.d(MyApplication.getTAG(), "click dish item");
+            DishDetailFragment.actionStart(viewModel, dishName.get(), dishImageUrl.get(),
+                    dishPrice.get(), dishDetail.get(), orderDishNumber.get());
         }
     });
 
     private BindingCommand reduceButtonClick = new BindingCommand(new BindingAction() {
         @Override
         public void call() {
-            // TODO:click reduce button
+            // click reduce button
             Log.d(MyApplication.getTAG(), "click reduce button");
+            changeOrderDishNumber(String.valueOf(Integer.valueOf(orderDishNumber.get()) - 1));
         }
     });
 
     private BindingCommand addButtonClick = new BindingCommand(new BindingAction() {
         @Override
         public void call() {
-            // TODO:click add button
+            // click add button
             Log.d(MyApplication.getTAG(), "click add button");
+            changeOrderDishNumber(String.valueOf(Integer.valueOf(orderDishNumber.get()) + 1));
         }
     });
 
+    private void changeOrderDishNumber(String number) {
+        orderDishNumber.set(number);
+        OrderDish newOrderDish = null;
+        for (OrderDish orderDish : viewModel.getOrder().getOrderDishes()) {
+            if (orderDish.getDishServerId() == dishServerId) {
+                newOrderDish = orderDish;
+                break;
+            }
+        }
+        if (newOrderDish == null) {
+            newOrderDish = new OrderDish();
+            newOrderDish.setDishServerId(dishServerId);
+            Dish dish = new Dish();
+            dish.setServerId(dishServerId);
+            dish.setDishName(dishName.get());
+            dish.setDishDetail(dishDetail.get());
+            dish.setDishPrice(Double.valueOf(dishPrice.get()));
+            dish.setDishImageUrl(dishImageUrl.get());
+            newOrderDish.setDish(dish);
+            viewModel.getOrder().getOrderDishes().add(newOrderDish);
+        }
+        newOrderDish.setDishNumber(Integer.valueOf(orderDishNumber.get()));
+        if (newOrderDish.getDishNumber() == 0) {
+            viewModel.getOrder().getOrderDishes().remove(newOrderDish);
+        }
+        Log.d(MyApplication.getTAG(), "order change: " + viewModel.getOrder());
+        viewModel.getOrderDishNumberChangeObservable().setValue(OrderDishDishesItemViewModel.this);
+    }
+
     public OrderDishDishesItemViewModel(@NonNull OrderDishViewModel orderDishViewModel) {
         super(orderDishViewModel);
-        dishImageUrl = new ObservableField<>("https://raw.githubusercontent.com/xilou31/Dishes-OrderingSystem/master/UI/%E7%82%B9%E9%A4%90%E7%95%8C%E9%9D%A21.jpg");
+        dishImageUrl = new ObservableField<>();
         dishName = new ObservableField<>("菜名");
         dishDetail = new ObservableField<>("菜简介");
         dishPrice = new ObservableField<>("0.00");
-        dishNumber = new ObservableField<>("0");
+        orderDishNumber = new ObservableField<>("0");
         dishNumberVisibility = new ObservableField<>(View.INVISIBLE);
         reduceIconVisibility = new ObservableField<>(View.INVISIBLE);
+    }
+
+    public OrderDishDishesItemViewModel(@NonNull OrderDishViewModel orderDishViewModel,
+                                        String dishName, String dishImageUrl, String dishDetail,
+                                        String dishPrice, String orderDishNumber, int dishServerId) {
+        this(orderDishViewModel);
+        this.dishName.set(dishName);
+        this.dishImageUrl.set(dishImageUrl);
+        this.dishDetail.set(dishDetail);
+        this.dishPrice.set(dishPrice);
+        if (!"0".equals(orderDishNumber)) {
+            this.orderDishNumber.set(orderDishNumber);
+            dishNumberVisibility.set(View.VISIBLE);
+            dishNumberVisibility.set(View.VISIBLE);
+        }
+        this.dishServerId = dishServerId;
     }
 
     public BindingCommand getReduceButtonClick() {
@@ -91,8 +148,8 @@ public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewMod
         return dishPrice;
     }
 
-    public ObservableField<String> getDishNumber() {
-        return dishNumber;
+    public ObservableField<String> getOrderDishNumber() {
+        return orderDishNumber;
     }
 
     public ObservableField<Integer> getReduceIconVisibility() {

@@ -7,11 +7,19 @@ import androidx.annotation.NonNull;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableField;
 
+import com.aha.dishordersystem.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import me.goldze.mvvmhabit.base.ItemViewModel;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
+import me.goldze.mvvmhabit.bus.Messenger;
 
 public class OrderDishCategoryItemViewModel extends ItemViewModel<OrderDishViewModel> {
+
+    private List<OrderDishDishesItemViewModel> dishesItemViewModelList = new ArrayList<>();
 
     private ObservableField<String> categoryName;
 
@@ -27,7 +35,9 @@ public class OrderDishCategoryItemViewModel extends ItemViewModel<OrderDishViewM
         @Override
         public void call() {
             if (!isSelect()) {
-                // TODO:切换类别
+                // 切换类别
+                viewModel.getDishesItemViewModels().clear();
+                viewModel.getDishesItemViewModels().addAll(dishesItemViewModelList);
                 viewModel.getSelectChangeObservable().setValue(OrderDishCategoryItemViewModel.this);
             }
         }
@@ -47,13 +57,22 @@ public class OrderDishCategoryItemViewModel extends ItemViewModel<OrderDishViewM
      * @param orderDishViewModel
      * @param categoryName
      * @param selectLineFlagVisibility true则选择类别，否则false
+     * @param dishesItemViewModelList
      */
     public OrderDishCategoryItemViewModel(@NonNull OrderDishViewModel orderDishViewModel,
-                                          String categoryName, boolean selectLineFlagVisibility) {
+                                          String categoryName, boolean selectLineFlagVisibility,
+                                          List<OrderDishDishesItemViewModel> dishesItemViewModelList,
+                                          String orderDishNumber) {
         this(orderDishViewModel);
         this.categoryName.set(categoryName);
         if (selectLineFlagVisibility) {
-            viewModel.getSelectChangeObservable().setValue(this);
+            this.selectLineFlagVisibility.set(View.VISIBLE);
+            categoryTextColor.set(viewModel.getApplication().getResources().getColor(R.color.colorPrimary));
+        }
+        this.dishesItemViewModelList = dishesItemViewModelList;
+        if (!"0".equals(orderDishNumber)) {
+            this.orderDishNumber.set(orderDishNumber);
+            orderDishNumberVisibility.set(View.VISIBLE);
         }
     }
 
@@ -65,7 +84,9 @@ public class OrderDishCategoryItemViewModel extends ItemViewModel<OrderDishViewM
         return Integer.valueOf(View.VISIBLE).equals(selectLineFlagVisibility.get());
     }
 
-
+    public List<OrderDishDishesItemViewModel> getDishesItemViewModelList() {
+        return dishesItemViewModelList;
+    }
 
     public ObservableField<String> getCategoryName() {
         return categoryName;

@@ -1,5 +1,6 @@
 package com.aha.dishordersystem.ui.order_dish;
 
+import android.accounts.NetworkErrorException;
 import android.app.Application;
 import android.util.Log;
 import android.view.View;
@@ -13,32 +14,33 @@ import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
 import com.aha.dishordersystem.app.MyApplication;
 import com.aha.dishordersystem.data.DataRepository;
-import com.aha.dishordersystem.data.db.model.dish.DishCategory;
-import com.aha.dishordersystem.data.db.model.dish.Dish;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
-import com.aha.dishordersystem.data.db.model.order.OrderDish;
+import com.aha.dishordersystem.data.network.json.DishCategoryJson;
+import com.aha.dishordersystem.data.network.json.DishJson;
 import com.aha.dishordersystem.data.network.json.DishListJson;
-import com.aha.dishordersystem.ui.dish_detail.DishDetailFragment;
 import com.aha.dishordersystem.util.JsonUtils;
 
-import org.litepal.LitePal;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import me.goldze.mvvmhabit.base.BaseViewModel;
+import me.goldze.mvvmhabit.binding.command.BindingAction;
+import me.goldze.mvvmhabit.binding.command.BindingCommand;
+import me.goldze.mvvmhabit.binding.command.BindingConsumer;
 import me.goldze.mvvmhabit.bus.event.SingleLiveEvent;
 import me.goldze.mvvmhabit.utils.RxUtils;
-import me.goldze.mvvmhabit.utils.ToastUtils;
 import me.tatarka.bindingcollectionadapter2.ItemBinding;
 
 public class OrderDishViewModel extends BaseViewModel<DataRepository> {
 
+    private HistoryOrder order = new HistoryOrder();
+
     private ObservableField<Integer> floatingButtonVisibility = new ObservableField<>(View.INVISIBLE);
+
+    private ObservableField<Integer> wrongPageVisibility = new ObservableField<>(View.GONE);
 
     private ObservableList<OrderDishCategoryItemViewModel> categoryItemViewModels
             = new ObservableArrayList<>();
@@ -55,114 +57,102 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
     private SingleLiveEvent<OrderDishCategoryItemViewModel> selectChangeObservable =
             new SingleLiveEvent<>();
 
+    private SingleLiveEvent<OrderDishDishesItemViewModel> orderDishNumberChangeObservable =
+            new SingleLiveEvent<>();
+
+    private  SingleLiveEvent<Integer> setWrongPageVisibilityLiveEvent = new SingleLiveEvent<>();
+
+    private BindingCommand wrongPageClick = new BindingCommand(new BindingAction() {
+        @Override
+        public void call() {
+            // click wrong page reload
+            setWrongPageVisibilityLiveEvent.setValue(View.GONE);
+            initData();
+        }
+    });
+
+    private BindingCommand floatingButtonClick = new BindingCommand(new BindingAction() {
+        @Override
+        public void call() {
+            // TODO:click floating button
+            Log.d(MyApplication.getTAG(), "click floating button");
+        }
+    });
+
     public OrderDishViewModel(@NonNull Application application, DataRepository dataRepository) {
         super(application, dataRepository);
-        for (int i = 0; i < 5; i++) {
-            if (i == 0) {
-                OrderDishCategoryItemViewModel categoryItemViewModel =
-                        new OrderDishCategoryItemViewModel(this, "aha", true);
-                categoryItemViewModels.add(categoryItemViewModel);
-            }
-            else {
-                categoryItemViewModels.add(new OrderDishCategoryItemViewModel(this));
-            }
-        }
-        for (int i = 0; i < 20; i++) {
-            dishesItemViewModels.add(new OrderDishDishesItemViewModel(this));
-        }
-
-//        DishCategory dishCategory = new DishCategory();
-//        dishCategory.setCategoryName("aha");
-//        List<OrderDish> orderDishes = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            OrderDish orderDish = new OrderDish();
-//            orderDish.setDishNumber(1);
-//            Dish dish = new Dish();
-//            dish.setServerId(i);
-//            dish.setDishImageUrl("http://aha.jpg");
-//            dish.setDishName("aha");
-//            dish.setDishPrice(4.7);
-//            dish.setDishDetail("aha做的菜");
-//            dish.setDishCategory(dishCategory);
-//            orderDish.setDish(dish);
-//            orderDish.setDishServerId(dish.getServerId());
-//            orderDishes.add(orderDish);
-//            dishCategory.getDishes().add(dish);
-//        }
-//        final HistoryOrder historyOrder = new HistoryOrder();
-//        historyOrder.setOrderCreateTime(new Date());
-//        historyOrder.setOrderIsFinish(1);
-//        historyOrder.setOrderDishNumber(10);
-//        historyOrder.getOrderDishes().addAll(orderDishes);
-//
-//        List<DishCategory> dishCategories = new ArrayList<>();
-//        dishCategories.add(dishCategory);
-//        model.saveDishToDB(dishCategories);
-//        model.saveOrderToDB(historyOrder);
-//
-//        Log.d(MyApplication.getTAG(), "db: " + LitePal.findAll(OrderDish.class).size());
-//        Log.d(MyApplication.getTAG(), "db: " + LitePal.findAll(HistoryOrder.class, true).size());
-
-//        model.getAllOrders()
-//                .compose(RxUtils.schedulersTransformer())
-//                .doOnSubscribe(OrderDishViewModel.this)
-//                .doOnSubscribe(new Consumer<Disposable>() {
-//                    @Override
-//                    public void accept(Disposable disposable) throws Exception {
-//                        Log.d(MyApplication.getTAG(), "正在加载");
-//                        ToastUtils.showShort("正在加载");
-//                    }
-//                })
-//                .subscribe(new Consumer<List<HistoryOrder>>() {
-//
-//                    @Override
-//                    public void accept(List<HistoryOrder> historyOrders) throws Exception {
-//                        Log.d(MyApplication.getTAG(), "accept: " + historyOrders);
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        throwable.printStackTrace();
-//                        Log.d(MyApplication.getTAG(), "error: " + throwable.getMessage());
-//                    }
-//                });
-//        model.getAllDishes()
-//                .compose(RxUtils.schedulersTransformer())
-//                .doOnSubscribe(OrderDishViewModel.this)
-//                .doOnSubscribe(new Consumer<Disposable>() {
-//                    @Override
-//                    public void accept(Disposable disposable) throws Exception {
-//                        Log.d(MyApplication.getTAG(), "正在加载");
-//                        ToastUtils.showShort("正在加载");
-//                    }
-//                })
-//                .subscribe(new Consumer<DishListJson>() {
-//                    @Override
-//                    public void accept(DishListJson dishListJson) throws Exception {
-//                        List<DishCategory> dishCategories = JsonUtils.dishListJsonToDishCategories(dishListJson);
-//                        Log.d(MyApplication.getTAG(), "accept: " + dishListJson.getStatus());
-//                        Log.d(MyApplication.getTAG(), "accept: " + dishCategories);
-//                        model.saveDishToDB(dishListJson);
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        Log.d(MyApplication.getTAG(), "error:" + throwable);
-//                        throwable.printStackTrace();
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        Log.d(MyApplication.getTAG(), "finish");
-//                    }
-//                });
-
-
-
     }
 
-    public SingleLiveEvent<OrderDishCategoryItemViewModel> getSelectChangeObservable() {
-        return selectChangeObservable;
+    /**
+     * 初始化数据
+     */
+    public void initData() {
+        model.getAllDishes()
+                .compose(RxUtils.schedulersTransformer())   // 线程调度
+                .compose(RxUtils.exceptionTransformer())
+                .doOnSubscribe(this)                        // 与ViewModel生命周期同步
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.d(MyApplication.getTAG(), "开始加载");
+                        showDialog("正在加载...");
+                    }
+                })
+                .subscribe(new Consumer<DishListJson>() {
+                    @Override
+                    public void accept(DishListJson dishListJson) throws Exception {
+                        Log.d(MyApplication.getTAG(), "" + JsonUtils.dishListJsonToDishCategories(dishListJson));
+                        if (dishListJson.getStatus() == DishListJson.STATUS_ERROR) {
+                            throw new NetworkErrorException();
+                        }
+
+                        List<OrderDishDishesItemViewModel> allOrderDishViewModels = new ArrayList<>();
+
+                        for (DishCategoryJson category : dishListJson.getDishCategories()) {
+
+                            List<OrderDishDishesItemViewModel> dishList = new ArrayList<>();
+
+                            for (DishJson dish : category.getDishes()) {
+                                OrderDishDishesItemViewModel orderDishDishesItemViewModel =
+                                        new OrderDishDishesItemViewModel(OrderDishViewModel.this,
+                                        dish.getDishName(), dish.getDishImageUrl(),
+                                        dish.getDishDetail(), String.valueOf(dish.getDishPrice()),
+                                        "0", dish.getDishId());
+                                dishList.add(orderDishDishesItemViewModel);
+                            }
+
+                            OrderDishCategoryItemViewModel orderDishCategoryItemViewModel = new
+                                    OrderDishCategoryItemViewModel(OrderDishViewModel.this,
+                                    category.getDishCategory(), false, dishList, "0");
+                            categoryItemViewModels.add(orderDishCategoryItemViewModel);
+
+                            allOrderDishViewModels.addAll(dishList);
+                        }
+
+                        OrderDishCategoryItemViewModel allCategory =
+                                new OrderDishCategoryItemViewModel(OrderDishViewModel.this,
+                                        "全部", true, allOrderDishViewModels, "0");
+                        categoryItemViewModels.add(0, allCategory);
+                        // 显示全部类别
+                        dishesItemViewModels.addAll(allCategory.getDishesItemViewModelList());
+                        // 存储数据到本地
+                        model.saveDishToDB(dishListJson);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dismissDialog();
+                        Log.d(MyApplication.getTAG(), "捕获异常");
+                        setWrongPageVisibilityLiveEvent.setValue(View.VISIBLE);
+                        throwable.printStackTrace();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        Log.d(MyApplication.getTAG(), "加载结束");
+                        dismissDialog();
+                    }
+                });
     }
 
     /**
@@ -172,6 +162,34 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
      */
     public int getCategoryItemPosition(OrderDishCategoryItemViewModel orderDishCategoryItemViewModel) {
         return categoryItemViewModels.indexOf(orderDishCategoryItemViewModel);
+    }
+
+    public BindingCommand getFloatingButtonClick() {
+        return floatingButtonClick;
+    }
+
+    public HistoryOrder getOrder() {
+        return order;
+    }
+
+    public SingleLiveEvent<OrderDishDishesItemViewModel> getOrderDishNumberChangeObservable() {
+        return orderDishNumberChangeObservable;
+    }
+
+    public SingleLiveEvent<OrderDishCategoryItemViewModel> getSelectChangeObservable() {
+        return selectChangeObservable;
+    }
+
+    public SingleLiveEvent<Integer> getSetWrongPageVisibilityLiveEvent() {
+        return setWrongPageVisibilityLiveEvent;
+    }
+
+    public BindingCommand getWrongPageClick() {
+        return wrongPageClick;
+    }
+
+    public ObservableField<Integer> getWrongPageVisibility() {
+        return wrongPageVisibility;
     }
 
     public ObservableField<Integer> getFloatingButtonVisibility() {

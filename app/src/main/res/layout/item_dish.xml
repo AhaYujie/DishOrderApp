@@ -108,7 +108,8 @@
                     android:layout_height="25dp"
                     android:src="@mipmap/ic_delete_blue"
                     android:visibility="@{dishItemViewModel.reduceIconVisibility}"
-                    binding:onClickCommand="@{dishItemViewModel.reduceButtonClick}"/>
+                    binding:onClickCommand="@{dishItemViewModel.reduceButtonClick}"
+                    binding:isThrottleFirst="@{Boolean.TRUE}"/>
 
                 <TextView
                     android:id="@+id/order_dish_dish_number"
@@ -118,7 +119,7 @@
                     android:layout_marginStart="15dp"
                     android:textSize="18sp"
                     android:textColor="@color/black"
-                    android:text="@{dishItemViewModel.dishNumber}"
+                    android:text="@{dishItemViewModel.orderDishNumber}"
                     android:visibility="@{dishItemViewModel.dishNumberVisibility}"/>
 
                 <ImageView
@@ -127,7 +128,8 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
                     android:src="@mipmap/ic_add_blue"
-                    binding:onClickCommand="@{dishItemViewModel.addButtonClick}"/>
+                    binding:onClickCommand="@{dishItemViewModel.addButtonClick}"
+                    binding:isThrottleFirst="@{Boolean.TRUE}"/>
 
             </LinearLayout>
 
