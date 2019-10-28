@@ -1,5 +1,8 @@
 package com.aha.dishordersystem.data.db.model.order;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import org.litepal.annotation.Column;
@@ -12,7 +15,7 @@ import java.util.List;
 /**
  * 订单
  */
-public class HistoryOrder extends LitePalSupport {
+public class HistoryOrder extends LitePalSupport implements Parcelable {
 
     @Column(nullable = false)
     private Date orderCreateTime;
@@ -68,6 +71,40 @@ public class HistoryOrder extends LitePalSupport {
     public void setOrderDishes(List<OrderDish> orderDishes) {
         this.orderDishes = orderDishes;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(orderCreateTime.toString());
+        parcel.writeInt(orderIsFinish);
+        parcel.writeInt(orderDishNumber);
+        parcel.writeDouble(orderTotalPrice);
+        parcel.writeTypedList(orderDishes);
+    }
+
+    protected HistoryOrder(Parcel in) {
+        orderCreateTime = new Date(in.readString());
+        orderIsFinish = in.readInt();
+        orderDishNumber = in.readInt();
+        orderTotalPrice = in.readDouble();
+        in.readTypedList(orderDishes, OrderDish.CREATOR);
+    }
+
+    public static final Creator<HistoryOrder> CREATOR = new Creator<HistoryOrder>() {
+        @Override
+        public HistoryOrder createFromParcel(Parcel parcel) {
+            return new HistoryOrder(parcel);
+        }
+
+        @Override
+        public HistoryOrder[] newArray(int i) {
+            return new HistoryOrder[i];
+        }
+    };
 
     @NonNull
     @Override

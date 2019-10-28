@@ -42,7 +42,7 @@ public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewMod
             // click dish item
             Log.d(MyApplication.getTAG(), "click dish item");
             DishDetailFragment.actionStart(viewModel, dishName.get(), dishImageUrl.get(),
-                    dishPrice.get(), dishDetail.get(), orderDishNumber.get());
+                    dishPrice.get(), dishDetail.get(), orderDishNumber.get(), dishServerId);
         }
     });
 
@@ -118,6 +118,16 @@ public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewMod
             dishNumberVisibility.set(View.VISIBLE);
         }
         this.dishServerId = dishServerId;
+        Messenger.getDefault().register(this, DishDetailViewModel.TOKEN_DISHDETAILVIEWMODEL_CHANGE,
+                DishDetailViewModel.MessengerHelper.class, new BindingConsumer<DishDetailViewModel.MessengerHelper>() {
+            @Override
+            public void call(DishDetailViewModel.MessengerHelper messengerHelper) {
+                if (messengerHelper.dishServerId == OrderDishDishesItemViewModel.this.dishServerId) {
+                    Log.d(MyApplication.getTAG(), "call");
+                    changeOrderDishNumber(messengerHelper.orderNumber);
+                }
+            }
+        });
     }
 
     public BindingCommand getReduceButtonClick() {

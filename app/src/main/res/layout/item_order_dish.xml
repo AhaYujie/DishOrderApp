@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="orderDishItemViewModel"
+            type="com.aha.dishordersystem.ui.order_dish.confirm_order.OrderDishItemViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/order_dish_item_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/tmp_dish"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/order_dish_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/order_dish_item_image"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            android:maxLength="8"
+            android:text="宫保鸡丁"/>
+
+        <ImageView
+            android:id="@+id/dish_detail_reduce_button"
+            android:layout_width="25sp"
+            android:layout_height="25sp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/order_dish_item_number"
+            android:layout_toStartOf="@+id/order_dish_item_number"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@mipmap/ic_delete_blue" />
+
+        <TextView
+            android:id="@+id/order_dish_item_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/order_dish_item_add_button"
+            android:layout_toStartOf="@+id/order_dish_item_add_button"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="22"/>
+
+        <ImageView
+            android:id="@+id/order_dish_item_add_button"
+            android:layout_width="25sp"
+            android:layout_height="25sp"
+            android:layout_toLeftOf="@+id/order_dish_item_money_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@mipmap/ic_add_blue" />
+
+        <ImageView
+            android:id="@+id/order_dish_item_money_icon"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_toLeftOf="@+id/order_dish_item_price"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:src="@mipmap/ic_money_red"/>
+
+        <TextView
+            android:id="@+id/order_dish_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="19.99"/>
+    </RelativeLayout>
+
+</layout>

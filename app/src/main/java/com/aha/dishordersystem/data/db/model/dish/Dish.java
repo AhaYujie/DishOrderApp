@@ -1,5 +1,8 @@
 package com.aha.dishordersystem.data.db.model.dish;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import org.litepal.annotation.Column;
@@ -8,7 +11,7 @@ import org.litepal.crud.LitePalSupport;
 /**
  * 菜
  */
-public class Dish extends LitePalSupport {
+public class Dish extends LitePalSupport implements Parcelable {
 
     @Column(unique = true)
     private int serverId;   // 服务器数据库id
@@ -73,6 +76,42 @@ public class Dish extends LitePalSupport {
     public void setDishDetail(String dishDetail) {
         this.dishDetail = dishDetail;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(serverId);
+        parcel.writeString(dishName);
+        parcel.writeDouble(dishPrice);
+        parcel.writeString(dishImageUrl);
+        parcel.writeString(dishDetail);
+        parcel.writeParcelable(dishCategory, i);
+    }
+
+    protected Dish(Parcel in) {
+        serverId = in.readInt();
+        dishName = in.readString();
+        dishPrice = in.readDouble();
+        dishImageUrl = in.readString();
+        dishDetail = in.readString();
+        dishCategory = in.readParcelable(DishCategory.class.getClassLoader());
+    }
+
+    public static final Creator<Dish> CREATOR = new Creator<Dish>() {
+        @Override
+        public Dish createFromParcel(Parcel parcel) {
+            return new Dish(parcel);
+        }
+
+        @Override
+        public Dish[] newArray(int i) {
+            return new Dish[i];
+        }
+    };
 
     @NonNull
     @Override

@@ -91,7 +91,8 @@
                         android:layout_centerVertical="true"
                         android:src="@mipmap/ic_delete_blue"
                         android:visibility="@{dishDetailViewModel.reduceButtonVisibility}"
-                        binding:onClickCommand="@{dishDetailViewModel.reduceButtonClick}"/>
+                        binding:onClickCommand="@{dishDetailViewModel.reduceButtonClick}"
+                        binding:isThrottleFirst="@{Boolean.TRUE}"/>
 
                     <TextView
                         android:id="@+id/dish_detail_dish_number"
@@ -117,7 +118,8 @@
                         android:layout_marginRight="15dp"
                         android:layout_marginLeft="15dp"
                         android:src="@mipmap/ic_add_blue"
-                        binding:onClickCommand="@{dishDetailViewModel.addButtonClick}"/>
+                        binding:onClickCommand="@{dishDetailViewModel.addButtonClick}"
+                        binding:isThrottleFirst="@{Boolean.TRUE}"/>
 
                 </RelativeLayout>
 

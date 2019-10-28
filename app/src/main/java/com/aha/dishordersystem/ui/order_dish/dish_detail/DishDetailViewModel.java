@@ -18,6 +18,8 @@ import me.goldze.mvvmhabit.bus.Messenger;
 
 public class DishDetailViewModel extends BaseViewModel {
 
+    private int dishServerId;
+
     public static final String TOKEN_DISHDETAILVIEWMODEL_CHANGE = "token_dishdetailviewmodel_change";
 
     private ObservableField<String> dishImageUrl = new ObservableField<>("http://aha.jpg");
@@ -44,6 +46,8 @@ public class DishDetailViewModel extends BaseViewModel {
                 orderDishNumberVisibility.set(View.INVISIBLE);
                 reduceButtonVisibility.set(View.INVISIBLE);
             }
+            Messenger.getDefault().send(new MessengerHelper(dishServerId, orderDishNumber.get()),
+                    TOKEN_DISHDETAILVIEWMODEL_CHANGE);
         }
     });
 
@@ -57,6 +61,8 @@ public class DishDetailViewModel extends BaseViewModel {
                 orderDishNumberVisibility.set(View.VISIBLE);
                 reduceButtonVisibility.set(View.VISIBLE);
             }
+            Messenger.getDefault().send(new MessengerHelper(dishServerId, orderDishNumber.get()),
+                    TOKEN_DISHDETAILVIEWMODEL_CHANGE);
         }
     });
 
@@ -69,6 +75,7 @@ public class DishDetailViewModel extends BaseViewModel {
      * @param dishData
      */
     public void initData(Bundle dishData) {
+        dishServerId = dishData.getInt("dish_server_id");
         dishImageUrl.set(dishData.getString("dish_image_url"));
         dishName.set(dishData.getString("dish_name"));
         dishPrice.set(dishData.getString("dish_price"));
@@ -115,5 +122,14 @@ public class DishDetailViewModel extends BaseViewModel {
 
     public ObservableField<String> getDishPrice() {
         return dishPrice;
+    }
+
+    public class MessengerHelper {
+        public int dishServerId;
+        public String orderNumber;
+        public MessengerHelper(int dishServerId, String orderNumber) {
+            this.dishServerId = dishServerId;
+            this.orderNumber = orderNumber;
+        }
     }
 }

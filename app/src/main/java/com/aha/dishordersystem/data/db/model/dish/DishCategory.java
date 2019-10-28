@@ -1,5 +1,8 @@
 package com.aha.dishordersystem.data.db.model.dish;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import org.litepal.annotation.Column;
@@ -11,7 +14,7 @@ import java.util.List;
 /**
  * 菜类别
  */
-public class DishCategory extends LitePalSupport {
+public class DishCategory extends LitePalSupport implements Parcelable {
 
     @Column(nullable = false, unique = true)
     private String categoryName;
@@ -34,6 +37,34 @@ public class DishCategory extends LitePalSupport {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(categoryName);
+        parcel.writeTypedList(dishes);
+    }
+
+    protected DishCategory(Parcel in) {
+        categoryName = in.readString();
+        in.readTypedList(dishes, Dish.CREATOR);
+    }
+
+    public static final Creator<DishCategory> CREATOR = new Creator<DishCategory>() {
+        @Override
+        public DishCategory createFromParcel(Parcel parcel) {
+            return new DishCategory(parcel);
+        }
+
+        @Override
+        public DishCategory[] newArray(int i) {
+            return new DishCategory[i];
+        }
+    };
 
     @NonNull
     @Override

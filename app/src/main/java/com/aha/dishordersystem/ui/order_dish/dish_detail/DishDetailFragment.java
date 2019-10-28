@@ -27,15 +27,18 @@ public class DishDetailFragment extends BaseFragment<FragmentDishDetailBinding, 
      * @param dishPrice
      * @param dishDetail
      * @param orderDishNumber
+     * @param dishServerId
      */
     public static void actionStart(BaseViewModel viewModel, String dishName, String dishImageUrl,
-                                   String dishPrice, String dishDetail, String orderDishNumber) {
+                                   String dishPrice, String dishDetail, String orderDishNumber,
+                                   int dishServerId) {
         Bundle dishData = new Bundle();
         dishData.putString("dish_name", dishName);
         dishData.putString("dish_image_url", dishImageUrl);
         dishData.putString("dish_price", dishPrice);
         dishData.putString("dish_detail", dishDetail);
         dishData.putString("order_dish_number", orderDishNumber);
+        dishData.putInt("dish_server_id", dishServerId);
         viewModel.startContainerActivity(DishDetailFragment.class.getCanonicalName(), dishData);
     }
 
