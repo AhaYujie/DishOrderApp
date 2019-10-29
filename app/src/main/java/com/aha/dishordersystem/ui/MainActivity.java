@@ -52,7 +52,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, BaseViewMode
         initFragment();
         // 初始化底部导航栏
         initBottomNav();
-        startContainerActivity(ConfirmOrderFragment.class.getCanonicalName());
     }
 
     private void initFragment() {

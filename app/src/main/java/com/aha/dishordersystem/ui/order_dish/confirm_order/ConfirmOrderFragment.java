@@ -3,15 +3,18 @@ package com.aha.dishordersystem.ui.order_dish.confirm_order;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 
 import android.view.LayoutInflater;
 
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.databinding.FragmentConfirmOrderBinding;
+import com.aha.dishordersystem.util.MathUtils;
 
 import me.goldze.mvvmhabit.base.BaseFragment;
 import me.goldze.mvvmhabit.base.BaseViewModel;
@@ -65,6 +68,34 @@ public class ConfirmOrderFragment extends BaseFragment<FragmentConfirmOrderBindi
     @Override
     public void initData() {
         viewModel.initData(order);
+    }
+
+    @Override
+    public void initViewObservable() {
+        // 监听订单的菜数量变化
+        viewModel.getOrderDishNumberChangeEvent().observe(this, new Observer<OrderDishItemViewModel>() {
+            @Override
+            public void onChanged(OrderDishItemViewModel orderDishItemViewModel) {
+                // 更新单个菜的UI
+                if ("0".equals(orderDishItemViewModel.getOrderDishNumber().get())) {
+                    orderDishItemViewModel.getOrderDishNumberVisibility().set(View.INVISIBLE);
+                    orderDishItemViewModel.getReduceButtonVisibility().set(View.INVISIBLE);
+                }
+                else {
+                    orderDishItemViewModel.getOrderDishNumberVisibility().set(View.VISIBLE);
+                    orderDishItemViewModel.getReduceButtonVisibility().set(View.VISIBLE);
+                }
+                // 更新底部导航栏UI
+                viewModel.getOrderDishTotalPrice().set(MathUtils.doubleKeepTwoToString
+                        (viewModel.getOrder().getOrderTotalPrice()));
+                if (viewModel.getOrder().getOrderDishNumber() == 0) {
+                    viewModel.getPayButton().setPayable(false);
+                }
+                else {
+                    viewModel.getPayButton().setPayable(true);
+                }
+            }
+        });
     }
 }
 

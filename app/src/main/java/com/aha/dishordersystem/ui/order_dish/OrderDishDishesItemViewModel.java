@@ -11,6 +11,7 @@ import com.aha.dishordersystem.data.db.model.dish.Dish;
 import com.aha.dishordersystem.data.db.model.order.OrderDish;
 import com.aha.dishordersystem.ui.order_dish.dish_detail.DishDetailFragment;
 import com.aha.dishordersystem.ui.order_dish.dish_detail.DishDetailViewModel;
+import com.aha.dishordersystem.util.MathUtils;
 
 import me.goldze.mvvmhabit.base.ItemViewModel;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
@@ -19,6 +20,8 @@ import me.goldze.mvvmhabit.binding.command.BindingConsumer;
 import me.goldze.mvvmhabit.bus.Messenger;
 
 public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewModel> {
+
+    public static final String TOKEN_ORDER_DISH_NUMBER_CHANGE = "token_order_dish_number_change";
 
     private int dishServerId;
 
@@ -89,6 +92,14 @@ public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewMod
         if (newOrderDish.getDishNumber() == 0) {
             viewModel.getOrder().getOrderDishes().remove(newOrderDish);
         }
+        int orderDishNumber = 0;
+        double orderDishTotalPrice = 0.00;
+        for (OrderDish orderDish : viewModel.getOrder().getOrderDishes()) {
+            orderDishNumber += orderDish.getDishNumber();
+            orderDishTotalPrice += (orderDish.getDishNumber() * orderDish.getDish().getDishPrice());
+        }
+        viewModel.getOrder().setOrderDishNumber(orderDishNumber);
+        viewModel.getOrder().setOrderTotalPrice(orderDishTotalPrice);
         Log.d(MyApplication.getTAG(), "order change: " + viewModel.getOrder());
         viewModel.getOrderDishNumberChangeObservable().setValue(OrderDishDishesItemViewModel.this);
     }
@@ -111,23 +122,32 @@ public class OrderDishDishesItemViewModel extends ItemViewModel<OrderDishViewMod
         this.dishName.set(dishName);
         this.dishImageUrl.set(dishImageUrl);
         this.dishDetail.set(dishDetail);
-        this.dishPrice.set(dishPrice);
+        this.dishPrice.set(MathUtils.doubleKeepTwoToString(dishPrice));
         if (!"0".equals(orderDishNumber)) {
             this.orderDishNumber.set(orderDishNumber);
             dishNumberVisibility.set(View.VISIBLE);
             dishNumberVisibility.set(View.VISIBLE);
         }
         this.dishServerId = dishServerId;
-        Messenger.getDefault().register(this, DishDetailViewModel.TOKEN_DISHDETAILVIEWMODEL_CHANGE,
-                DishDetailViewModel.MessengerHelper.class, new BindingConsumer<DishDetailViewModel.MessengerHelper>() {
+        Messenger.getDefault().register(this, TOKEN_ORDER_DISH_NUMBER_CHANGE,
+                MessengerHelper.class, new BindingConsumer<MessengerHelper>() {
             @Override
-            public void call(DishDetailViewModel.MessengerHelper messengerHelper) {
+            public void call(MessengerHelper messengerHelper) {
                 if (messengerHelper.dishServerId == OrderDishDishesItemViewModel.this.dishServerId) {
                     Log.d(MyApplication.getTAG(), "call");
                     changeOrderDishNumber(messengerHelper.orderNumber);
                 }
             }
         });
+    }
+
+    public static class MessengerHelper {
+        public int dishServerId;
+        public String orderNumber;
+        public MessengerHelper(int dishServerId, String orderNumber) {
+            this.dishServerId = dishServerId;
+            this.orderNumber = orderNumber;
+        }
     }
 
     public BindingCommand getReduceButtonClick() {

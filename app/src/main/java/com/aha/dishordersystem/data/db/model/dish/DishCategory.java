@@ -49,6 +49,8 @@ public class DishCategory extends LitePalSupport implements Parcelable {
         parcel.writeTypedList(dishes);
     }
 
+    public DishCategory() {}
+
     protected DishCategory(Parcel in) {
         categoryName = in.readString();
         in.readTypedList(dishes, Dish.CREATOR);

@@ -92,6 +92,8 @@ public class Dish extends LitePalSupport implements Parcelable {
         parcel.writeParcelable(dishCategory, i);
     }
 
+    public Dish() {}
+
     protected Dish(Parcel in) {
         serverId = in.readInt();
         dishName = in.readString();

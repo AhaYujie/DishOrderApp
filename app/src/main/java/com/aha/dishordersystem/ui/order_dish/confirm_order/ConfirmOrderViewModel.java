@@ -13,13 +13,18 @@ import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
 import com.aha.dishordersystem.app.MyApplication;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
+import com.aha.dishordersystem.data.db.model.order.OrderDish;
+import com.aha.dishordersystem.util.MathUtils;
 
 import me.goldze.mvvmhabit.base.BaseViewModel;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
+import me.goldze.mvvmhabit.bus.event.SingleLiveEvent;
 import me.tatarka.bindingcollectionadapter2.ItemBinding;
 
 public class ConfirmOrderViewModel extends BaseViewModel {
+
+    private HistoryOrder order;
 
     private ObservableList<OrderDishItemViewModel> orderDishItemViewModels =
             new ObservableArrayList<>();
@@ -39,11 +44,22 @@ public class ConfirmOrderViewModel extends BaseViewModel {
         }
     });
 
+    private SingleLiveEvent<OrderDishItemViewModel> orderDishNumberChangeEvent =
+            new SingleLiveEvent<>();
+
+    private BindingCommand clearOrderDishListClick = new BindingCommand(new BindingAction() {
+        @Override
+        public void call() {
+            // 清空订单
+            for (OrderDishItemViewModel orderDishItemViewModel : orderDishItemViewModels) {
+                orderDishItemViewModel.getOrderDishNumber().set("0");
+                orderDishItemViewModel.changeOrderDishNumber();
+            }
+        }
+    });
+
     public ConfirmOrderViewModel(@NonNull Application application) {
         super(application);
-        for (int i = 0; i < 20; i++) {
-            orderDishItemViewModels.add(new OrderDishItemViewModel(this));
-        }
     }
 
     /**
@@ -51,7 +67,14 @@ public class ConfirmOrderViewModel extends BaseViewModel {
      * @param order
      */
     public void initData(HistoryOrder order) {
-        // TODO:init data
+        this.order = order;
+        if (order.getOrderDishNumber() != 0) {
+            orderDishTotalPrice.set(MathUtils.doubleKeepTwoToString(order.getOrderTotalPrice()));
+            payButton.setPayable(true);
+        }
+        for (OrderDish orderDish : order.getOrderDishes()) {
+            orderDishItemViewModels.add(new OrderDishItemViewModel(this, orderDish));
+        }
     }
 
     public class PayButton {
@@ -99,6 +122,18 @@ public class ConfirmOrderViewModel extends BaseViewModel {
         public BindingCommand getPayButtonClick() {
             return payButtonClick;
         }
+    }
+
+    public BindingCommand getClearOrderDishListClick() {
+        return clearOrderDishListClick;
+    }
+
+    public HistoryOrder getOrder() {
+        return order;
+    }
+
+    public SingleLiveEvent<OrderDishItemViewModel> getOrderDishNumberChangeEvent() {
+        return orderDishNumberChangeEvent;
     }
 
     public PayButton getPayButton() {

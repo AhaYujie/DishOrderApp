@@ -3,8 +3,10 @@ package com.aha.dishordersystem.ui.order_dish.dish_detail;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.aha.dishordersystem.BR;
@@ -63,4 +65,31 @@ public class DishDetailFragment extends BaseFragment<FragmentDishDetailBinding, 
         viewModel.initData(dishData);
     }
 
+    @Override
+    public void initViewObservable() {
+        // 监听订单的菜数量变化
+        viewModel.getOrderDishNumberChange().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer == 0) {
+                    viewModel.getOrderDishNumberVisibility().set(View.INVISIBLE);
+                    viewModel.getReduceButtonVisibility().set(View.INVISIBLE);
+                }
+                else {
+                    viewModel.getOrderDishNumberVisibility().set(View.VISIBLE);
+                    viewModel.getReduceButtonVisibility().set(View.VISIBLE);
+                }
+            }
+        });
+    }
 }
+
+
+
+
+
+
+
+
+
+

@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.aha.dishordersystem.R" />
+
         <variable
             name="orderDishItemViewModel"
             type="com.aha.dishordersystem.ui.order_dish.confirm_order.OrderDishItemViewModel" />
@@ -11,6 +13,7 @@
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:binding="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -21,8 +24,9 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/tmp_dish"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            binding:placeholderRes="@{R.mipmap.ic_pic_loading}"
+            binding:url="@{orderDishItemViewModel.dishImageUrl}"/>
 
         <TextView
             android:id="@+id/order_dish_item_name"
@@ -33,8 +37,8 @@
             android:layout_marginLeft="5dp"
             android:textSize="17sp"
             android:textColor="@color/black"
-            android:maxLength="8"
-            android:text="宫保鸡丁"/>
+            android:maxLength="12"
+            android:text="@{orderDishItemViewModel.dishName}"/>
 
         <ImageView
             android:id="@+id/dish_detail_reduce_button"
@@ -45,7 +49,10 @@
             android:layout_toStartOf="@+id/order_dish_item_number"
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
-            android:src="@mipmap/ic_delete_blue" />
+            android:src="@mipmap/ic_delete_blue"
+            android:visibility="@{orderDishItemViewModel.reduceButtonVisibility}"
+            binding:onClickCommand="@{orderDishItemViewModel.reduceButtonClick}"
+            binding:isThrottleFirst="@{Boolean.TRUE}"/>
 
         <TextView
             android:id="@+id/order_dish_item_number"
@@ -58,7 +65,8 @@
             android:layout_centerVertical="true"
             android:textSize="18sp"
             android:textColor="@color/black"
-            android:text="22"/>
+            android:text="@{orderDishItemViewModel.orderDishNumber}"
+            android:visibility="@{orderDishItemViewModel.orderDishNumberVisibility}"/>
 
         <ImageView
             android:id="@+id/order_dish_item_add_button"
@@ -68,7 +76,9 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             android:layout_marginEnd="20dp"
-            android:src="@mipmap/ic_add_blue" />
+            android:src="@mipmap/ic_add_blue"
+            binding:onClickCommand="@{orderDishItemViewModel.addButtonClick}"
+            binding:isThrottleFirst="@{Boolean.TRUE}"/>
 
         <ImageView
             android:id="@+id/order_dish_item_money_icon"
@@ -91,7 +101,7 @@
             android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="19.99"/>
+            android:text="@{orderDishItemViewModel.orderDishTotalPrice}"/>
     </RelativeLayout>
 
 </layout>

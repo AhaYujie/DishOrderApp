@@ -15,12 +15,15 @@ import com.aha.dishordersystem.R;
 import com.aha.dishordersystem.app.MyApplication;
 import com.aha.dishordersystem.data.DataRepository;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
+import com.aha.dishordersystem.data.db.model.order.OrderDish;
 import com.aha.dishordersystem.data.network.json.DishCategoryJson;
 import com.aha.dishordersystem.data.network.json.DishJson;
 import com.aha.dishordersystem.data.network.json.DishListJson;
+import com.aha.dishordersystem.ui.order_dish.confirm_order.ConfirmOrderFragment;
 import com.aha.dishordersystem.util.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
@@ -74,8 +77,11 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
     private BindingCommand floatingButtonClick = new BindingCommand(new BindingAction() {
         @Override
         public void call() {
-            // TODO:click floating button
+            // click floating button
             Log.d(MyApplication.getTAG(), "click floating button");
+            OrderDishViewModel.this.order.setOrderCreateTime(new Date());
+            OrderDishViewModel.this.order.setOrderIsFinish(HistoryOrder.UN_FINISH);
+            ConfirmOrderFragment.actionStart(OrderDishViewModel.this, OrderDishViewModel.this.order);
         }
     });
 

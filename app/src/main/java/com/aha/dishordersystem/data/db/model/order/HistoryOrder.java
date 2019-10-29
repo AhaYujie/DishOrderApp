@@ -17,6 +17,10 @@ import java.util.List;
  */
 public class HistoryOrder extends LitePalSupport implements Parcelable {
 
+    public static final int FINISHED = 1;
+
+    public static final int UN_FINISH = 0;
+
     @Column(nullable = false)
     private Date orderCreateTime;
 
@@ -85,6 +89,8 @@ public class HistoryOrder extends LitePalSupport implements Parcelable {
         parcel.writeDouble(orderTotalPrice);
         parcel.writeTypedList(orderDishes);
     }
+
+    public  HistoryOrder() {}
 
     protected HistoryOrder(Parcel in) {
         orderCreateTime = new Date(in.readString());

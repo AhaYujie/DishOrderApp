@@ -60,6 +60,8 @@ public class OrderDish extends LitePalSupport implements Parcelable {
         parcel.writeInt(dishNumber);
     }
 
+    public OrderDish() {}
+
     protected OrderDish(Parcel in) {
         dishServerId = in.readInt();
         dish = in.readParcelable(Dish.class.getClassLoader());

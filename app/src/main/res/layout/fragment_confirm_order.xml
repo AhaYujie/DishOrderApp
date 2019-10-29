@@ -21,18 +21,19 @@
         android:background="@color/white"
         tools:context=".ui.order_dish.confirm_order.ConfirmOrderFragment">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/confirm_order_bar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_height="?attr/actionBarSize">
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:id="@+id/confirm_order_bar_back_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@mipmap/ic_back_blue"
-                android:layout_marginLeft="15dp"
+                android:padding="6dp"
+                android:layout_marginLeft="13dp"
+                android:layout_centerVertical="true"
                 android:clickable="true"
                 android:focusable="true"
                 binding:onClickCommand="@{confirmOrderViewModel.backButtonClick}"/>
@@ -41,11 +42,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/confirm_order_bar_back_icon"
+                android:layout_toEndOf="@+id/confirm_order_bar_back_icon"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:text="确认订单"/>
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:gravity="center"
+                binding:onClickCommand="@{confirmOrderViewModel.clearOrderDishListClick}">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:src="@mipmap/ic_bin_gray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:text="清空"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
 
 

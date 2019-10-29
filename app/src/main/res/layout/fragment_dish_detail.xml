@@ -34,10 +34,12 @@
                 binding:url="@{dishDetailViewModel.dishImageUrl}"/>
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="17dp"
-                android:src="@mipmap/ic_back_white" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:src="@mipmap/ic_back_white"
+                binding:onClickCommand='@{dishDetailViewModel.backButtonClick}'/>
 
             <RelativeLayout
                 android:id="@+id/dish_detail_first_layout"

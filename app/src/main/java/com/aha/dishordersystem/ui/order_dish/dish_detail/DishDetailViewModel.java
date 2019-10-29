@@ -10,17 +10,17 @@ import androidx.databinding.ObservableField;
 
 import com.aha.dishordersystem.app.MyApplication;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
+import com.aha.dishordersystem.ui.order_dish.OrderDishDishesItemViewModel;
 
 import me.goldze.mvvmhabit.base.BaseViewModel;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
 import me.goldze.mvvmhabit.bus.Messenger;
+import me.goldze.mvvmhabit.bus.event.SingleLiveEvent;
 
 public class DishDetailViewModel extends BaseViewModel {
 
     private int dishServerId;
-
-    public static final String TOKEN_DISHDETAILVIEWMODEL_CHANGE = "token_dishdetailviewmodel_change";
 
     private ObservableField<String> dishImageUrl = new ObservableField<>("http://aha.jpg");
 
@@ -36,35 +36,43 @@ public class DishDetailViewModel extends BaseViewModel {
 
     private ObservableField<String> dishDetail = new ObservableField<>("简介");
 
+    private SingleLiveEvent<Integer> orderDishNumberChange = new SingleLiveEvent<>();
+
+    private BindingCommand backButtonClick = new BindingCommand(new BindingAction() {
+        @Override
+        public void call() {
+            finish();
+        }
+    });
+
     private BindingCommand reduceButtonClick = new BindingCommand(new BindingAction() {
         @Override
         public void call() {
-            // TODO:click reduce button
+            // click reduce button
             Log.d(MyApplication.getTAG(), "click dish detail reduce button");
             orderDishNumber.set(String.valueOf(Integer.valueOf(orderDishNumber.get()) - 1));
-            if ("0".equals(orderDishNumber.get())) {
-                orderDishNumberVisibility.set(View.INVISIBLE);
-                reduceButtonVisibility.set(View.INVISIBLE);
-            }
-            Messenger.getDefault().send(new MessengerHelper(dishServerId, orderDishNumber.get()),
-                    TOKEN_DISHDETAILVIEWMODEL_CHANGE);
+            changeOrderDishNumber();
         }
     });
 
     private BindingCommand addButtonClick = new BindingCommand(new BindingAction() {
         @Override
         public void call() {
-            // TODO:click add button
+            // click add button
             Log.d(MyApplication.getTAG(), "click dish detail add button");
             orderDishNumber.set(String.valueOf(Integer.valueOf(orderDishNumber.get()) + 1));
-            if (!"0".equals(orderDishNumber.get())) {
-                orderDishNumberVisibility.set(View.VISIBLE);
-                reduceButtonVisibility.set(View.VISIBLE);
-            }
-            Messenger.getDefault().send(new MessengerHelper(dishServerId, orderDishNumber.get()),
-                    TOKEN_DISHDETAILVIEWMODEL_CHANGE);
+            changeOrderDishNumber();
         }
     });
+
+    /**
+     * 改变订单的菜数量
+     */
+    private void changeOrderDishNumber() {
+        orderDishNumberChange.setValue(Integer.valueOf(orderDishNumber.get()));
+        Messenger.getDefault().send(new OrderDishDishesItemViewModel.MessengerHelper(dishServerId,
+                orderDishNumber.get()), OrderDishDishesItemViewModel.TOKEN_ORDER_DISH_NUMBER_CHANGE);
+    }
 
     public DishDetailViewModel(@NonNull Application application) {
         super(application);
@@ -86,6 +94,14 @@ public class DishDetailViewModel extends BaseViewModel {
             orderDishNumberVisibility.set(View.VISIBLE);
         }
         Log.d(MyApplication.getTAG(), "dish number: " + dishData.getString("order_dish_number"));
+    }
+
+    public SingleLiveEvent<Integer> getOrderDishNumberChange() {
+        return orderDishNumberChange;
+    }
+
+    public BindingCommand getBackButtonClick() {
+        return backButtonClick;
     }
 
     public BindingCommand getAddButtonClick() {
@@ -122,14 +138,5 @@ public class DishDetailViewModel extends BaseViewModel {
 
     public ObservableField<String> getDishPrice() {
         return dishPrice;
-    }
-
-    public class MessengerHelper {
-        public int dishServerId;
-        public String orderNumber;
-        public MessengerHelper(int dishServerId, String orderNumber) {
-            this.dishServerId = dishServerId;
-            this.orderNumber = orderNumber;
-        }
     }
 }
