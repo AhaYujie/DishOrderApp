@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="historyOrderItemViewModel"
+            type="com.aha.dishordersystem.ui.history_order.HistoryOrderItemViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+        <ImageView
+            android:id="@+id/history_order_item_first_dish_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="15dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/tmp_dish"/>
+
+        <TextView
+            android:id="@+id/history_order_item_first_dish_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/history_order_item_first_dish_image"
+            android:layout_marginTop="15dp"
+            android:maxEms="7"
+            android:ellipsize="end"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="宫保鸡丁"/>
+
+        <TextView
+            android:id="@+id/history_order_item_etc_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/history_order_item_first_dish_name"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="等"/>
+
+        <TextView
+            android:id="@+id/history_order_item_dish_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/history_order_item_etc_text"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="8"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/history_order_item_dish_number"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="件商品"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/history_order_item_first_dish_image"
+            android:layout_below="@+id/history_order_item_first_dish_name"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/gray"
+            android:textSize="15sp"
+            android:text="2019-11-16 24:00"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toLeftOf="@+id/history_order_item_finish_flag_text"
+            android:layout_toStartOf="@+id/history_order_item_finish_flag_text"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/ic_right_arrow_gray"/>
+
+        <TextView
+            android:id="@+id/history_order_item_finish_flag_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="15dp"
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            android:text="已完成"/>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/history_order_item_first_dish_image"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_delete_order"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:text="删除订单"/>
+
+    </RelativeLayout>
+
+</layout>
