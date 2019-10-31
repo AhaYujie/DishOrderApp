@@ -5,12 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
+import com.aha.dishordersystem.app.MyApplication;
 import com.aha.dishordersystem.databinding.FragmentDishDetailBinding;
 
 import me.goldze.mvvmhabit.base.BaseFragment;

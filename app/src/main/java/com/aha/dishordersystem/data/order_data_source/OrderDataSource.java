@@ -2,7 +2,8 @@ package com.aha.dishordersystem.data.order_data_source;
 
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.data.network.json.DishJson;
-import com.aha.dishordersystem.data.network.json.PayOrderJson;
+import com.aha.dishordersystem.data.network.json.OrderDishesJson;
+import com.aha.dishordersystem.data.network.json.PayOrderResponseJson;
 
 import java.util.List;
 
@@ -30,9 +31,9 @@ public interface OrderDataSource {
 
     /**
      * 支付订单
-     * @param dishJsonList 订单的菜
+     * @param orderDishesJson 订单的菜
      * @return
      */
-    Observable<PayOrderJson> payOrder(List<DishJson> dishJsonList);
+    Observable<PayOrderResponseJson> payOrder(OrderDishesJson orderDishesJson);
 
 }

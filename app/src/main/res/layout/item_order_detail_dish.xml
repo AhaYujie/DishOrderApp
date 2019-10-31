@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="orderDetailDishItemViewModel"
+            type="com.aha.dishordersystem.ui.history_order.order_detail.OrderDetailDishItemViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:binding="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/order_detail_dish_item_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            binding:url="@{orderDetailDishItemViewModel.dishImageUrl}"/>
+
+        <TextView
+            android:id="@+id/order_detail_dish_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/order_detail_dish_item_image"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            android:maxLength="12"
+            android:text="@{orderDetailDishItemViewModel.dishName}"/>
+
+        <ImageView
+            android:id="@+id/order_detail_dish_number_product_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toRightOf="@+id/order_detail_dish_item_name"
+            android:layout_toEndOf="@+id/order_detail_dish_item_name"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:src="@mipmap/ic_product_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/order_detail_dish_number_product_icon"
+            android:layout_toEndOf="@+id/order_detail_dish_number_product_icon"
+            android:layout_centerVertical="true"
+            android:textColor="@color/gray"
+            android:textSize="15sp"
+            android:text="@{orderDetailDishItemViewModel.orderDishNumber}"/>
+
+        <ImageView
+            android:id="@+id/order_detail_dish_item_money_icon"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_toLeftOf="@+id/order_detail_dish_item_price"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:src="@mipmap/ic_money_red"/>
+
+        <TextView
+            android:id="@+id/order_detail_dish_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="@{orderDetailDishItemViewModel.orderDishPrice}"/>
+    </RelativeLayout>
+
+</layout>
+

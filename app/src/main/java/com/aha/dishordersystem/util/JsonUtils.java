@@ -2,14 +2,34 @@ package com.aha.dishordersystem.util;
 
 import com.aha.dishordersystem.data.db.model.dish.DishCategory;
 import com.aha.dishordersystem.data.db.model.dish.Dish;
+import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
+import com.aha.dishordersystem.data.db.model.order.OrderDish;
 import com.aha.dishordersystem.data.network.json.DishCategoryJson;
 import com.aha.dishordersystem.data.network.json.DishJson;
 import com.aha.dishordersystem.data.network.json.DishListJson;
+import com.aha.dishordersystem.data.network.json.OrderDishJson;
+import com.aha.dishordersystem.data.network.json.OrderDishesJson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JsonUtils {
+
+    /**
+     * HistoryOrder 转换成 OrderDishesJson
+     * @param historyOrder
+     * @return
+     */
+    public static OrderDishesJson historyOrderToOrderDishesJson(HistoryOrder historyOrder) {
+        OrderDishesJson orderDishesJson = new OrderDishesJson();
+        for (OrderDish orderDish : historyOrder.getOrderDishes()) {
+            OrderDishJson orderDishJson = new OrderDishJson();
+            orderDishJson.setDishId(orderDish.getDishServerId());
+            orderDishJson.setOrderDishNumber(orderDish.getDishNumber());
+            orderDishesJson.getOrderDishes().add(orderDishJson);
+        }
+        return  orderDishesJson;
+    }
 
     /**
      * DishListJson 转换为 List<DishCategory>

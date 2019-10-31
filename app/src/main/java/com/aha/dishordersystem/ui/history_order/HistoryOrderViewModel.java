@@ -22,6 +22,9 @@ public class HistoryOrderViewModel extends BaseViewModel<DataRepository> {
 
     public HistoryOrderViewModel(Application application, DataRepository dataRepository) {
         super(application, dataRepository);
+        for (int i = 0; i < 20; i++) {
+            historyOrderItemViewModels.add(new HistoryOrderItemViewModel(this));
+        }
     }
 
     public ItemBinding<HistoryOrderItemViewModel> getHistoryOrderItemViewModelItemBinding() {
@@ -31,4 +34,6 @@ public class HistoryOrderViewModel extends BaseViewModel<DataRepository> {
     public ObservableList<HistoryOrderItemViewModel> getHistoryOrderItemViewModels() {
         return historyOrderItemViewModels;
     }
+
+
 }

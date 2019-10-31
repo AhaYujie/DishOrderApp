@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.aha.dishordersystem.data.DataRepository;
 import com.aha.dishordersystem.ui.history_order.HistoryOrderViewModel;
+import com.aha.dishordersystem.ui.history_order.order_detail.OrderDetailViewModel;
 import com.aha.dishordersystem.ui.order_dish.OrderDishViewModel;
+import com.aha.dishordersystem.ui.order_dish.confirm_order.ConfirmOrderViewModel;
 
 public class MyViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
@@ -50,6 +52,9 @@ public class MyViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         }
         else if (modelClass.isAssignableFrom(HistoryOrderViewModel.class)) {
             return (T) new HistoryOrderViewModel(application, dataRepository);
+        }
+        else if (modelClass.isAssignableFrom(ConfirmOrderViewModel.class)) {
+            return (T) new ConfirmOrderViewModel(application, dataRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

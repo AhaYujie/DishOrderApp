@@ -13,7 +13,7 @@ import org.litepal.crud.LitePalSupport;
 /**
  * 订单菜
  */
-public class OrderDish extends LitePalSupport implements Parcelable {
+public class OrderDish extends LitePalSupport implements Parcelable, Cloneable {
 
     @Column(nullable = false)
     private int dishServerId;
@@ -79,6 +79,14 @@ public class OrderDish extends LitePalSupport implements Parcelable {
             return new OrderDish[i];
         }
     };
+
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        OrderDish clone = (OrderDish) super.clone();
+        clone.dish = (Dish) dish.clone();
+        return clone;
+    }
 
     @NonNull
     @Override

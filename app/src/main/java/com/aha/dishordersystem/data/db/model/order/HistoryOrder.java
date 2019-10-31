@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 订单
  */
-public class HistoryOrder extends LitePalSupport implements Parcelable {
+public class HistoryOrder extends LitePalSupport implements Parcelable, Cloneable {
 
     public static final int FINISHED = 1;
 
@@ -111,6 +111,18 @@ public class HistoryOrder extends LitePalSupport implements Parcelable {
             return new HistoryOrder[i];
         }
     };
+
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        HistoryOrder clone = (HistoryOrder) super.clone();
+        clone.orderCreateTime = (Date) orderCreateTime.clone();
+        clone.orderDishes = new ArrayList<>();
+        for (OrderDish orderDish : orderDishes) {
+            clone.orderDishes.add((OrderDish) orderDish.clone());
+        }
+        return clone;
+    }
 
     @NonNull
     @Override

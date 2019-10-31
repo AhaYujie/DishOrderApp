@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
+import com.aha.dishordersystem.app.MyViewModelFactory;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.databinding.FragmentConfirmOrderBinding;
 import com.aha.dishordersystem.util.MathUtils;
@@ -57,6 +59,12 @@ public class ConfirmOrderFragment extends BaseFragment<FragmentConfirmOrderBindi
     @Override
     public int initVariableId() {
         return BR.confirmOrderViewModel;
+    }
+
+    @Override
+    public ConfirmOrderViewModel initViewModel() {
+        MyViewModelFactory myViewModelFactory = MyViewModelFactory.getInstance(getActivity().getApplication());
+        return ViewModelProviders.of(this, myViewModelFactory).get(ConfirmOrderViewModel.class);
     }
 
     @Override

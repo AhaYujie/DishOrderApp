@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 菜类别
  */
-public class DishCategory extends LitePalSupport implements Parcelable {
+public class DishCategory extends LitePalSupport implements Parcelable, Cloneable {
 
     @Column(nullable = false, unique = true)
     private String categoryName;
@@ -67,6 +67,17 @@ public class DishCategory extends LitePalSupport implements Parcelable {
             return new DishCategory[i];
         }
     };
+
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        DishCategory clone = (DishCategory) super.clone();
+        clone.dishes = new ArrayList<>();
+        for (Dish dish : dishes) {
+            clone.dishes.add((Dish) dish.clone());
+        }
+        return clone;
+    }
 
     @NonNull
     @Override

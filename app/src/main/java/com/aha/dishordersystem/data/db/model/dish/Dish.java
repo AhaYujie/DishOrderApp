@@ -11,7 +11,7 @@ import org.litepal.crud.LitePalSupport;
 /**
  * 菜
  */
-public class Dish extends LitePalSupport implements Parcelable {
+public class Dish extends LitePalSupport implements Parcelable, Cloneable {
 
     @Column(unique = true)
     private int serverId;   // 服务器数据库id
@@ -27,7 +27,7 @@ public class Dish extends LitePalSupport implements Parcelable {
     private String dishDetail;
 
     @Column(nullable = false)
-    private DishCategory dishCategory;
+    private DishCategory dishCategory = new DishCategory();
 
     public DishCategory getDishCategory() {
         return dishCategory;
@@ -114,6 +114,14 @@ public class Dish extends LitePalSupport implements Parcelable {
             return new Dish[i];
         }
     };
+
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Dish clone = (Dish) super.clone();
+        clone.dishCategory = (DishCategory) dishCategory.clone();
+        return clone;
+    }
 
     @NonNull
     @Override

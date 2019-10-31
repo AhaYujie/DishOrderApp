@@ -121,9 +121,9 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
                             for (DishJson dish : category.getDishes()) {
                                 OrderDishDishesItemViewModel orderDishDishesItemViewModel =
                                         new OrderDishDishesItemViewModel(OrderDishViewModel.this,
-                                        dish.getDishName(), dish.getDishImageUrl(),
-                                        dish.getDishDetail(), String.valueOf(dish.getDishPrice()),
-                                        "0", dish.getDishId());
+                                                dish.getDishName(), dish.getDishImageUrl(),
+                                                dish.getDishDetail(), String.valueOf(dish.getDishPrice()),
+                                                "0", dish.getDishId());
                                 dishList.add(orderDishDishesItemViewModel);
                             }
 
@@ -148,7 +148,7 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         dismissDialog();
-                        Log.d(MyApplication.getTAG(), "捕获异常");
+                        Log.d(MyApplication.getTAG(), "捕获异常: " + throwable.getMessage());
                         setWrongPageVisibilityLiveEvent.setValue(View.VISIBLE);
                         throwable.printStackTrace();
                     }
@@ -217,4 +217,5 @@ public class OrderDishViewModel extends BaseViewModel<DataRepository> {
     public ItemBinding<OrderDishDishesItemViewModel> getDishesItemBinding() {
         return dishesItemBinding;
     }
+
 }

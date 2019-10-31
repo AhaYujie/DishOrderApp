@@ -83,79 +83,78 @@ public class OrderDishFragment extends BaseFragment<FragmentOrderDishBinding, Or
         // 监听选择类别
         viewModel.getSelectChangeObservable().observe(this,
                 new Observer<OrderDishCategoryItemViewModel>() {
-            @Override
-            public void onChanged(OrderDishCategoryItemViewModel orderDishCategoryItemViewModel) {
-                for (OrderDishCategoryItemViewModel orderDishCategoryItemViewModel1:
-                    viewModel.getCategoryItemViewModels()) {
-                    orderDishCategoryItemViewModel1.getCategoryTextColor().set(Color.GRAY);
-                    orderDishCategoryItemViewModel1.getSelectLineFlagVisibility().set(View.INVISIBLE);
-                }
-                orderDishCategoryItemViewModel.getCategoryTextColor().set(getResources().getColor(R.color.colorPrimary));
-                orderDishCategoryItemViewModel.getSelectLineFlagVisibility().set(View.VISIBLE);
-                categoryRecyclerView.smoothScrollToPosition
-                        (viewModel.getCategoryItemPosition(orderDishCategoryItemViewModel));
-            }
-        });
+                    @Override
+                    public void onChanged(OrderDishCategoryItemViewModel orderDishCategoryItemViewModel) {
+                        for (OrderDishCategoryItemViewModel orderDishCategoryItemViewModel1:
+                                viewModel.getCategoryItemViewModels()) {
+                            orderDishCategoryItemViewModel1.getCategoryTextColor().set(Color.GRAY);
+                            orderDishCategoryItemViewModel1.getSelectLineFlagVisibility().set(View.INVISIBLE);
+                        }
+                        orderDishCategoryItemViewModel.getCategoryTextColor().set(getResources().getColor(R.color.colorPrimary));
+                        orderDishCategoryItemViewModel.getSelectLineFlagVisibility().set(View.VISIBLE);
+                        categoryRecyclerView.smoothScrollToPosition
+                                (viewModel.getCategoryItemPosition(orderDishCategoryItemViewModel));
+                    }
+                });
 
         // 监听订单的菜数量的变化
         viewModel.getOrderDishNumberChangeObservable().observe(this,
                 new Observer<OrderDishDishesItemViewModel>() {
-            @Override
-            public void onChanged(OrderDishDishesItemViewModel changeDishesItemViewModel) {
-                // 刷新类别菜数量和菜item的菜数量的UI
-                if (!"0".equals(changeDishesItemViewModel.getOrderDishNumber().get())) {
-                    changeDishesItemViewModel.getDishNumberVisibility().set(View.VISIBLE);
-                    changeDishesItemViewModel.getReduceIconVisibility().set(View.VISIBLE);
-                }
-                int totalOrderDishNumber = 0;   // 订单的菜的总数量
-
-                for (int categoryIndex = 1; categoryIndex < viewModel.getCategoryItemViewModels().size();
-                     categoryIndex++) {
-
-                    OrderDishCategoryItemViewModel categoryItemViewModel =
-                            viewModel.getCategoryItemViewModels().get(categoryIndex);
-
-                    int categoryOrderDishNumber = 0;    // 订单的这个类别的菜的总数量
-                    boolean isCategoryOrderDishNumberChange = false;    // 订单的这个类别的菜的总数量是否改变
-
-                    for (OrderDishDishesItemViewModel dishesItemViewModel :
-                            categoryItemViewModel.getDishesItemViewModelList()) {
-                        String orderDishNumber = dishesItemViewModel.getOrderDishNumber().get();
-                        if (dishesItemViewModel.equals(changeDishesItemViewModel)) {
-                            isCategoryOrderDishNumberChange = true;
-                            if ("0".equals(orderDishNumber)) {
-                                dishesItemViewModel.getReduceIconVisibility().set(View.INVISIBLE);
-                                dishesItemViewModel.getDishNumberVisibility().set(View.INVISIBLE);
-                            }
+                    @Override
+                    public void onChanged(OrderDishDishesItemViewModel changeDishesItemViewModel) {
+                        // 刷新类别菜数量和菜item的菜数量的UI
+                        if (!"0".equals(changeDishesItemViewModel.getOrderDishNumber().get())) {
+                            changeDishesItemViewModel.getDishNumberVisibility().set(View.VISIBLE);
+                            changeDishesItemViewModel.getReduceIconVisibility().set(View.VISIBLE);
                         }
-                        categoryOrderDishNumber += Integer.valueOf(orderDishNumber);
-                    }
-                    if (isCategoryOrderDishNumberChange) {
-                        categoryItemViewModel.getOrderDishNumber().
-                                set(String.valueOf(categoryOrderDishNumber));
-                        if ("0".equals(categoryItemViewModel.getOrderDishNumber().get())) {
-                            categoryItemViewModel.getOrderDishNumberVisibility().set(View.INVISIBLE);
+                        int totalOrderDishNumber = 0;   // 订单的菜的总数量
+
+                        for (int categoryIndex = 1; categoryIndex < viewModel.getCategoryItemViewModels().size();
+                             categoryIndex++) {
+
+                            OrderDishCategoryItemViewModel categoryItemViewModel =
+                                    viewModel.getCategoryItemViewModels().get(categoryIndex);
+
+                            int categoryOrderDishNumber = 0;    // 订单的这个类别的菜的总数量
+
+                            for (OrderDishDishesItemViewModel dishesItemViewModel :
+                                    categoryItemViewModel.getDishesItemViewModelList()) {
+                                String orderDishNumber = dishesItemViewModel.getOrderDishNumber().get();
+                                if ("0".equals(orderDishNumber)) {
+                                    dishesItemViewModel.getReduceIconVisibility().set(View.INVISIBLE);
+                                    dishesItemViewModel.getDishNumberVisibility().set(View.INVISIBLE);
+                                }
+                                else {
+                                    dishesItemViewModel.getReduceIconVisibility().set(View.VISIBLE);
+                                    dishesItemViewModel.getDishNumberVisibility().set(View.VISIBLE);
+                                }
+                                categoryOrderDishNumber += Integer.valueOf(orderDishNumber);
+                            }
+                            categoryItemViewModel.getOrderDishNumber().
+                                    set(String.valueOf(categoryOrderDishNumber));
+                            if ("0".equals(categoryItemViewModel.getOrderDishNumber().get())) {
+                                categoryItemViewModel.getOrderDishNumberVisibility().set(View.INVISIBLE);
+                            }
+                            else {
+                                categoryItemViewModel.getOrderDishNumberVisibility().set(View.VISIBLE);
+                            }
+
+                            totalOrderDishNumber += categoryOrderDishNumber;
+                        }
+                        // 更新(全部)类别的U和悬浮按钮UI
+                        OrderDishCategoryItemViewModel allCategoryItemViewModel =
+                                viewModel.getCategoryItemViewModels().get(0);
+                        allCategoryItemViewModel.getOrderDishNumber().set(String.valueOf(totalOrderDishNumber));
+                        if ("0".equals(allCategoryItemViewModel.getOrderDishNumber().get())) {
+                            allCategoryItemViewModel.getOrderDishNumberVisibility().set(View.INVISIBLE);
+                            viewModel.getFloatingButtonVisibility().set(View.INVISIBLE);
                         }
                         else {
-                            categoryItemViewModel.getOrderDishNumberVisibility().set(View.VISIBLE);
+                            allCategoryItemViewModel.getOrderDishNumberVisibility().set(View.VISIBLE);
+                            viewModel.getFloatingButtonVisibility().set(View.VISIBLE);
                         }
                     }
-                    totalOrderDishNumber += categoryOrderDishNumber;
-                }
-                // 更新(全部)类别的U和悬浮按钮UI
-                OrderDishCategoryItemViewModel allCategoryItemViewModel =
-                        viewModel.getCategoryItemViewModels().get(0);
-                allCategoryItemViewModel.getOrderDishNumber().set(String.valueOf(totalOrderDishNumber));
-                if ("0".equals(allCategoryItemViewModel.getOrderDishNumber().get())) {
-                    allCategoryItemViewModel.getOrderDishNumberVisibility().set(View.INVISIBLE);
-                    viewModel.getFloatingButtonVisibility().set(View.INVISIBLE);
-                }
-                else {
-                    allCategoryItemViewModel.getOrderDishNumberVisibility().set(View.VISIBLE);
-                    viewModel.getFloatingButtonVisibility().set(View.VISIBLE);
-                }
-            }
-        });
+                });
     }
 }
 

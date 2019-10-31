@@ -1,6 +1,10 @@
 package com.aha.dishordersystem.data.network.json;
 
-public class PayOrderJson {
+public class PayOrderResponseJson {
+
+    public static final int PAY_ORDER_SUCCESS = 1;
+
+    public static final int PAY_ORDER_ERROR = 0;
 
     private int status;
 

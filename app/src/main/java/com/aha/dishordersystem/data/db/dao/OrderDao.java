@@ -24,7 +24,7 @@ public class OrderDao {
             List<OrderDish> orderDishes = new ArrayList<>();
             for (OrderDish orderDish : historyOrder.getOrderDishes()) {
                 Dish dish = LitePal.where("serverId = ?", String.valueOf(orderDish.getDishServerId()))
-                                   .findFirst(Dish.class);
+                        .findFirst(Dish.class);
                 orderDish.setDish(dish);
                 orderDishes.add(orderDish);
             }
@@ -38,6 +38,7 @@ public class OrderDao {
      * @param historyOrder
      */
     public static void save(HistoryOrder historyOrder) {
+        Log.d(MyApplication.getTAG(), "order: "+ historyOrder);
         try {
             List<OrderDish> orderDishes = new ArrayList<>(historyOrder.getOrderDishes());
             for (OrderDish orderDish : orderDishes) {
@@ -55,7 +56,7 @@ public class OrderDao {
         try {
             orderDish.save();
             Dish dish = LitePal.where("serverId = ?", String.valueOf(orderDish.getDishServerId()))
-                                .findFirst(Dish.class);
+                    .findFirst(Dish.class);
             if (dish != null) {
                 orderDish.setDish(dish);
                 orderDish.save();

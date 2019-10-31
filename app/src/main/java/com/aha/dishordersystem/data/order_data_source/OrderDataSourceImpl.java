@@ -1,17 +1,24 @@
 package com.aha.dishordersystem.data.order_data_source;
 
+import android.util.Log;
+
+import com.aha.dishordersystem.app.MyApplication;
 import com.aha.dishordersystem.data.db.dao.OrderDao;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.data.network.api.OrderService;
 import com.aha.dishordersystem.data.network.json.DishJson;
-import com.aha.dishordersystem.data.network.json.PayOrderJson;
+import com.aha.dishordersystem.data.network.json.OrderDishesJson;
+import com.aha.dishordersystem.data.network.json.PayOrderResponseJson;
 import com.aha.dishordersystem.util.HttpsUtils;
+import com.google.gson.Gson;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class OrderDataSourceImpl implements OrderDataSource {
 
@@ -82,18 +89,29 @@ public class OrderDataSourceImpl implements OrderDataSource {
      * @param historyOrder
      */
     @Override
-    public void saveOrderToDB(HistoryOrder historyOrder) {
-        OrderDao.save(historyOrder);
+    public void saveOrderToDB(final HistoryOrder historyOrder) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(MyApplication.getTAG(), "prev: " + OrderDao.getAllOrders().size());
+                OrderDao.save(historyOrder);
+                Log.d(MyApplication.getTAG(), "save order thread: " + Thread.currentThread().getName());
+                Log.d(MyApplication.getTAG(), "now: " + OrderDao.getAllOrders().size());
+            }
+        }).start();
     }
 
     /**
      * 支付订单
      *
-     * @param dishJsonList 订单的菜
+     * @param orderDishesJson 订单的菜
      * @return
      */
     @Override
-    public Observable<PayOrderJson> payOrder(List<DishJson> dishJsonList) {
-        return orderService.payOrder(HttpsUtils.TOKEN, dishJsonList);
+    public Observable<PayOrderResponseJson> payOrder(OrderDishesJson orderDishesJson) {
+        orderDishesJson.setToken(HttpsUtils.TOKEN);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                new Gson().toJson(orderDishesJson));
+        return orderService.payOrder(requestBody);
     }
 }

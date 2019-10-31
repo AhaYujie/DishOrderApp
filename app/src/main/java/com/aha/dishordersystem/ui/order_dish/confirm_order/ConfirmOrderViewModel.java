@@ -1,5 +1,6 @@
 package com.aha.dishordersystem.ui.order_dish.confirm_order;
 
+import android.accounts.NetworkErrorException;
 import android.app.Application;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -12,17 +13,27 @@ import androidx.databinding.ObservableList;
 import com.aha.dishordersystem.BR;
 import com.aha.dishordersystem.R;
 import com.aha.dishordersystem.app.MyApplication;
+import com.aha.dishordersystem.data.DataRepository;
 import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.data.db.model.order.OrderDish;
+import com.aha.dishordersystem.data.network.json.OrderDishesJson;
+import com.aha.dishordersystem.data.network.json.PayOrderResponseJson;
+import com.aha.dishordersystem.ui.history_order.order_detail.OrderDetailFragment;
+import com.aha.dishordersystem.util.JsonUtils;
 import com.aha.dishordersystem.util.MathUtils;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import me.goldze.mvvmhabit.base.BaseViewModel;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
 import me.goldze.mvvmhabit.bus.event.SingleLiveEvent;
+import me.goldze.mvvmhabit.utils.RxUtils;
+import me.goldze.mvvmhabit.utils.ToastUtils;
 import me.tatarka.bindingcollectionadapter2.ItemBinding;
 
-public class ConfirmOrderViewModel extends BaseViewModel {
+public class ConfirmOrderViewModel extends BaseViewModel<DataRepository> {
 
     private HistoryOrder order;
 
@@ -51,15 +62,22 @@ public class ConfirmOrderViewModel extends BaseViewModel {
         @Override
         public void call() {
             // 清空订单
-            for (OrderDishItemViewModel orderDishItemViewModel : orderDishItemViewModels) {
-                orderDishItemViewModel.getOrderDishNumber().set("0");
-                orderDishItemViewModel.changeOrderDishNumber();
-            }
+            clearOrderList();
         }
     });
 
-    public ConfirmOrderViewModel(@NonNull Application application) {
-        super(application);
+    /**
+     * 清空订单
+     */
+    private void clearOrderList() {
+        for (OrderDishItemViewModel orderDishItemViewModel : orderDishItemViewModels) {
+            orderDishItemViewModel.getOrderDishNumber().set("0");
+            orderDishItemViewModel.changeOrderDishNumber();
+        }
+    }
+
+    public ConfirmOrderViewModel(@NonNull Application application, DataRepository dataRepository) {
+        super(application, dataRepository);
     }
 
     /**
@@ -85,8 +103,55 @@ public class ConfirmOrderViewModel extends BaseViewModel {
         private BindingCommand payButtonClick = new BindingCommand(new BindingAction() {
             @Override
             public void call() {
-                // TODO:click pay button
                 Log.d(MyApplication.getTAG(), "click pay button");
+                // 请求服务器
+                OrderDishesJson orderDishesJson = JsonUtils.historyOrderToOrderDishesJson(
+                        ConfirmOrderViewModel.this.order
+                );
+                ConfirmOrderViewModel.this.model.payOrder(orderDishesJson)
+                        .compose(RxUtils.schedulersTransformer())
+                        .compose(RxUtils.exceptionTransformer())
+                        .doOnSubscribe(new Consumer<Disposable>() {
+                            @Override
+                            public void accept(Disposable disposable) throws Exception {
+                                Log.d(MyApplication.getTAG(), "请求服务器支付订单");
+                                showDialog("正在支付...");
+                            }
+                        })
+                        .subscribe(new Consumer<PayOrderResponseJson>() {
+                            @Override
+                            public void accept(PayOrderResponseJson payOrderResponseJson) throws Exception {
+                                if (payOrderResponseJson.getStatus() == PayOrderResponseJson.PAY_ORDER_ERROR) {
+                                    throw new NetworkErrorException();
+                                }
+                                Log.d(MyApplication.getTAG(), "accept response: " + payOrderResponseJson.getStatus());
+                                // 保存订单到本地数据库
+                                order.setOrderIsFinish(HistoryOrder.FINISHED);
+                                model.saveOrderToDB((HistoryOrder) order.clone());
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                // 支付失败
+                                dismissDialog();
+                                ToastUtils.showShort("支付失败, 网络出问题了...");
+                                Log.d(MyApplication.getTAG(), "异常: " + throwable.getMessage());
+                            }
+                        }, new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                // 支付完成
+                                Log.d(MyApplication.getTAG(), "支付完成");
+                                dismissDialog();
+                                ToastUtils.showShort("支付成功");
+                                // 跳转到订单详情界面并结束这个确认订单界面
+                                OrderDetailFragment.actionStart(ConfirmOrderViewModel.this,
+                                        (HistoryOrder) order.clone());
+                                // 清空订单列表
+                                clearOrderList();
+                                ConfirmOrderViewModel.this.finish();
+                            }
+                        });
             }
         });
 
