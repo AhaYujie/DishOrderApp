@@ -67,4 +67,34 @@ public class OrderDao {
         }
     }
 
+    /**
+     * 删除订单
+     * @param historyOrder
+     */
+    public static void delete(HistoryOrder historyOrder) {
+        try {
+            Log.d(MyApplication.getTAG(), "order serialNumber: " + historyOrder.getSerialNumber());
+            HistoryOrder found = LitePal.where("serialNumber = ?", historyOrder.getSerialNumber()).
+                    findFirst(HistoryOrder.class);
+            if (found != null) {
+                found.delete();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

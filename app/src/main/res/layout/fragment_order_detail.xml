@@ -36,7 +36,8 @@
                 android:layout_marginLeft="13dp"
                 android:layout_centerVertical="true"
                 android:clickable="true"
-                android:focusable="true"/>
+                android:focusable="true"
+                binding:onClickCommand="@{orderDetailViewModel.backButtonClick}"/>
 
             <TextView
                 android:layout_width="wrap_content"

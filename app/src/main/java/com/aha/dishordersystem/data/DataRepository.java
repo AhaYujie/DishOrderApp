@@ -117,4 +117,14 @@ public class DataRepository extends BaseModel implements DishDataSource, OrderDa
     public Observable<PayOrderResponseJson> payOrder(OrderDishesJson orderDishesJson) {
         return orderDataSource.payOrder(orderDishesJson);
     }
+
+    /**
+     * 删除订单
+     *
+     * @param historyOrder
+     */
+    @Override
+    public void deleteOrder(HistoryOrder historyOrder) {
+        orderDataSource.deleteOrder(historyOrder);
+    }
 }

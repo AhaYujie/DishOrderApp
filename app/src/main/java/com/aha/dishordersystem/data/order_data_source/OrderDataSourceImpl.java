@@ -114,4 +114,14 @@ public class OrderDataSourceImpl implements OrderDataSource {
                 new Gson().toJson(orderDishesJson));
         return orderService.payOrder(requestBody);
     }
+
+    /**
+     * 删除订单
+     *
+     * @param historyOrder
+     */
+    @Override
+    public void deleteOrder(HistoryOrder historyOrder) {
+        OrderDao.delete(historyOrder);
+    }
 }

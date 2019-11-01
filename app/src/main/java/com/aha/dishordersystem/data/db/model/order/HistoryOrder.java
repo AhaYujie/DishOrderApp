@@ -21,6 +21,9 @@ public class HistoryOrder extends LitePalSupport implements Parcelable, Cloneabl
 
     public static final int UN_FINISH = 0;
 
+    @Column(nullable = false, unique = true)
+    private String serialNumber;
+
     @Column(nullable = false)
     private Date orderCreateTime;
 
@@ -35,6 +38,14 @@ public class HistoryOrder extends LitePalSupport implements Parcelable, Cloneabl
 
     @Column(nullable = false)
     private List<OrderDish> orderDishes = new ArrayList<>();
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
     public Date getOrderCreateTime() {
         return orderCreateTime;

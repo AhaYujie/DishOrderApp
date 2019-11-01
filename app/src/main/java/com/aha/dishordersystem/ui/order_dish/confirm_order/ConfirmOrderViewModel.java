@@ -18,9 +18,11 @@ import com.aha.dishordersystem.data.db.model.order.HistoryOrder;
 import com.aha.dishordersystem.data.db.model.order.OrderDish;
 import com.aha.dishordersystem.data.network.json.OrderDishesJson;
 import com.aha.dishordersystem.data.network.json.PayOrderResponseJson;
+import com.aha.dishordersystem.ui.history_order.HistoryOrderViewModel;
 import com.aha.dishordersystem.ui.history_order.order_detail.OrderDetailFragment;
 import com.aha.dishordersystem.util.JsonUtils;
 import com.aha.dishordersystem.util.MathUtils;
+import com.aha.dishordersystem.util.StringUtils;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -28,6 +30,7 @@ import io.reactivex.functions.Consumer;
 import me.goldze.mvvmhabit.base.BaseViewModel;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
+import me.goldze.mvvmhabit.bus.Messenger;
 import me.goldze.mvvmhabit.bus.event.SingleLiveEvent;
 import me.goldze.mvvmhabit.utils.RxUtils;
 import me.goldze.mvvmhabit.utils.ToastUtils;
@@ -125,9 +128,13 @@ public class ConfirmOrderViewModel extends BaseViewModel<DataRepository> {
                                     throw new NetworkErrorException();
                                 }
                                 Log.d(MyApplication.getTAG(), "accept response: " + payOrderResponseJson.getStatus());
+                                order.setSerialNumber(StringUtils.getRandomString());
                                 // 保存订单到本地数据库
                                 order.setOrderIsFinish(HistoryOrder.FINISHED);
                                 model.saveOrderToDB((HistoryOrder) order.clone());
+                                // 通知订单列表变化
+                                Messenger.getDefault().send(order.clone(),
+                                        HistoryOrderViewModel.TOKEN_HISTORY_ORDER_NUMBER_CHANGE);
                             }
                         }, new Consumer<Throwable>() {
                             @Override

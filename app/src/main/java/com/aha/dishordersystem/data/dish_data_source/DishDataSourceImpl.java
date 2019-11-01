@@ -48,30 +48,32 @@ public class DishDataSourceImpl implements DishDataSource {
      */
     @Override
     public Observable<DishListJson> getAllDishes() {
-        final List<DishCategory> dishCategories = DishDao.getAllDishes();
-        // 本地没有数据则从服务器获取
-        if (dishCategories.isEmpty()) {
-            Log.d(MyApplication.getTAG(), "from server");
-            return dishService.getAllDishes(HttpsUtils.TOKEN);
-        }
-        else {
-            Log.d(MyApplication.getTAG(), "from db");
-            return Observable.create(new ObservableOnSubscribe<DishListJson>() {
-                @Override
-                public void subscribe(ObservableEmitter<DishListJson> emitter) throws Exception {
-                    try {
-                        emitter.onNext(JsonUtils.dishCategoriesToDishListJson(dishCategories));
-                    }
-                    catch (Exception e) {
-                        emitter.onError(e);
-                        e.printStackTrace();
-                    }
-                    finally {
-                        emitter.onComplete();
-                    }
-                }
-            });
-        }
+//        final List<DishCategory> dishCategories = DishDao.getAllDishes();
+//        // 本地没有数据则从服务器获取
+//        if (dishCategories.isEmpty()) {
+//            Log.d(MyApplication.getTAG(), "from server");
+//            return dishService.getAllDishes(HttpsUtils.TOKEN);
+//        }
+//        else {
+//            Log.d(MyApplication.getTAG(), "from db");
+//            return Observable.create(new ObservableOnSubscribe<DishListJson>() {
+//                @Override
+//                public void subscribe(ObservableEmitter<DishListJson> emitter) throws Exception {
+//                    try {
+//                        emitter.onNext(JsonUtils.dishCategoriesToDishListJson(dishCategories));
+//                    }
+//                    catch (Exception e) {
+//                        emitter.onError(e);
+//                        e.printStackTrace();
+//                    }
+//                    finally {
+//                        emitter.onComplete();
+//                    }
+//                }
+//            });
+//        }
+        // 从服务器获取
+        return dishService.getAllDishes(HttpsUtils.TOKEN);
     }
 
     /**

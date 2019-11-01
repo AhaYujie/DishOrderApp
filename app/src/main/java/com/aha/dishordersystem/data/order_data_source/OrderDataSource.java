@@ -36,4 +36,10 @@ public interface OrderDataSource {
      */
     Observable<PayOrderResponseJson> payOrder(OrderDishesJson orderDishesJson);
 
+    /**
+     * 删除订单
+     * @param historyOrder
+     */
+    void deleteOrder(HistoryOrder historyOrder);
+
 }
