@@ -112,6 +112,7 @@ public class OrderDataSourceImpl implements OrderDataSource {
         orderDishesJson.setToken(HttpsUtils.TOKEN);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 new Gson().toJson(orderDishesJson));
+        Log.d(MyApplication.getTAG(), "request: " + new Gson().toJson(orderDishesJson));
         return orderService.payOrder(requestBody);
     }
 

@@ -25,7 +25,7 @@ import me.goldze.mvvmhabit.utils.KLog;
 
 public class HttpsUtils {
 
-    public static final String TOKEN = "aha";
+    public static final String TOKEN = "Dish@123";
 
     public static class SSLParams {
         public SSLSocketFactory sSLSocketFactory;

@@ -30,7 +30,6 @@
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
-                android:src="@mipmap/tmp_dish"
                 binding:url="@{dishDetailViewModel.dishImageUrl}"/>
 
             <ImageView
@@ -151,7 +150,7 @@
                     android:layout_marginRight="15sp"
                     android:layout_marginEnd="15sp"
                     android:layout_marginBottom="15sp"
-                    android:maxLines="3"
+                    android:maxLength="300"
                     android:textSize="15sp"
                     android:textColor="@color/gray"
                     android:text="@{dishDetailViewModel.dishDetail}"/>

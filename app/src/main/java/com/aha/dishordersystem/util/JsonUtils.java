@@ -28,6 +28,8 @@ public class JsonUtils {
             orderDishJson.setOrderDishNumber(orderDish.getDishNumber());
             orderDishesJson.getOrderDishes().add(orderDishJson);
         }
+        orderDishesJson.setOrderDishTotalNumber(historyOrder.getOrderDishNumber());
+        orderDishesJson.setOrderTotalPrice(historyOrder.getOrderTotalPrice());
         return  orderDishesJson;
     }
 

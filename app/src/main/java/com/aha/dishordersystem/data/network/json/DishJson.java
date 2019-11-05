@@ -16,7 +16,7 @@ public class DishJson {
     @SerializedName("dish_detail")
     private String dishDetail;
 
-    @SerializedName("dish_img_url")
+    @SerializedName("dish_image_url")
     private String dishImageUrl;
 
     public int getDishId() {

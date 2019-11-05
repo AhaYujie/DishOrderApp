@@ -12,6 +12,28 @@ public class OrderDishesJson {
     @SerializedName("order_dishes")
     private List<OrderDishJson> orderDishes = new ArrayList<>();
 
+    @SerializedName("order_dish_total_number")
+    private int orderDishTotalNumber;
+
+    @SerializedName("order_total_price")
+    private double orderTotalPrice;
+
+    public int getOrderDishTotalNumber() {
+        return orderDishTotalNumber;
+    }
+
+    public void setOrderDishTotalNumber(int orderDishTotalNumber) {
+        this.orderDishTotalNumber = orderDishTotalNumber;
+    }
+
+    public double getOrderTotalPrice() {
+        return orderTotalPrice;
+    }
+
+    public void setOrderTotalPrice(double orderTotalPrice) {
+        this.orderTotalPrice = orderTotalPrice;
+    }
+
     public List<OrderDishJson> getOrderDishes() {
         return orderDishes;
     }
