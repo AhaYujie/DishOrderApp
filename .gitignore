@@ -67,4 +67,4 @@ fastlane/readme.md
 
 *.jks
 
-server_config.properties
+app/src/main/assets/server_config.properties
