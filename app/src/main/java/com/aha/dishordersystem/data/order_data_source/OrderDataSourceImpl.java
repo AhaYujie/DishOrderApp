@@ -109,7 +109,7 @@ public class OrderDataSourceImpl implements OrderDataSource {
      */
     @Override
     public Observable<PayOrderResponseJson> payOrder(OrderDishesJson orderDishesJson) {
-        orderDishesJson.setToken(HttpsUtils.TOKEN);
+        orderDishesJson.setToken(HttpsUtils.getToken());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 new Gson().toJson(orderDishesJson));
         Log.d(MyApplication.getTAG(), "request: " + new Gson().toJson(orderDishesJson));

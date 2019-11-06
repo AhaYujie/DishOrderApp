@@ -8,7 +8,10 @@ import com.aha.dishordersystem.BuildConfig;
 import com.aha.dishordersystem.app.MyApplication;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -40,8 +43,6 @@ public class RetrofitClient {
     private static final int DEFAULT_TIMEOUT = 20;
     //缓存时间
     private static final int CACHE_TIMEOUT = 10 * 1024 * 1024;
-    //服务端根路径
-    public static String baseUrl = "http://101.132.131.12:8081/Dish/";
 
     private static Context mContext = Utils.getContext();
 
@@ -60,14 +61,20 @@ public class RetrofitClient {
     }
 
     private RetrofitClient() {
-        this(baseUrl, null);
+        this(null, null);
     }
 
     private RetrofitClient(String url, Map<String, String> headers) {
         System.out.println(mContext);
-
-        if (TextUtils.isEmpty(url)) {
-            url = baseUrl;
+        Properties properties = new Properties();
+        try {
+            InputStream inputStream = MyApplication.getContext().getAssets().open("server_config.properties");
+            properties.load(inputStream);
+            url = properties.getProperty("server_route");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            url = null;
         }
 
         if (httpCacheDirectory == null) {

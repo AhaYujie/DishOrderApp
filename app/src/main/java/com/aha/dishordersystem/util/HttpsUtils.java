@@ -1,5 +1,11 @@
 package com.aha.dishordersystem.util;
 
+import android.util.Log;
+
+import com.aha.dishordersystem.app.MyApplication;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -9,6 +15,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Properties;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
@@ -20,12 +27,21 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import me.goldze.mvvmhabit.utils.KLog;
-
 
 public class HttpsUtils {
 
-    public static final String TOKEN = "Dish@123";
+    public static String getToken() {
+        Properties properties = new Properties();
+        try {
+            InputStream inputStream = MyApplication.getContext().getAssets().open("server_config.properties");
+            properties.load(inputStream);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return properties.getProperty("token");
+    }
 
     public static class SSLParams {
         public SSLSocketFactory sSLSocketFactory;

@@ -73,7 +73,8 @@ public class DishDataSourceImpl implements DishDataSource {
 //            });
 //        }
         // 从服务器获取
-        return dishService.getAllDishes(HttpsUtils.TOKEN);
+        Log.d(MyApplication.getTAG(), "token: " + HttpsUtils.getToken());
+        return dishService.getAllDishes(HttpsUtils.getToken());
     }
 
     /**
