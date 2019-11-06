@@ -33,7 +33,7 @@ DishOrderApp采用了MVVM架构，用[MVVMHabit][2]框架实现。下面是项�
 
 APK：[下载链接][4]
 
-**注意**：因为缺少服务器的配置文件server_config.properties，下载此项目代码构建APP是不可以的。若想自己构建APP，需要实现服务器接口，[接口文档][5]。
+**注意**：因为缺少服务器的配置文件`server_config.properties`，下载此项目代码构建APP是不可以的。若想自己构建APP，需要实现服务器接口，[接口文档][5]，并在`/app/app/src/main/assets/`目录里面添加`server_config.properties`文件，该文件里面有 `token` 和 `server_route` 两个属性。
     
 
 
