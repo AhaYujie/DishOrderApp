@@ -17,7 +17,7 @@
 DishOrderApp采用了MVVM架构，用[MVVMHabit][2]框架实现。下面是项目的大体架构设计图。
 
 
-![架构设计图][3]
+<img src="https://raw.githubusercontent.com/AhaYujie/DishOrderApp/master/images/架构设计图.jpg" width="600" hegiht="400"/>
 
 
  - 顶部深蓝色层是控制UI的View层，就是Android里的Activity和Fragment这些。
@@ -39,6 +39,5 @@ APK：[下载链接][4]
 
   [1]: https://raw.githubusercontent.com/AhaYujie/DishOrderApp/master/app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
   [2]: https://github.com/goldze/MVVMHabit
-  [3]: https://raw.githubusercontent.com/AhaYujie/DishOrderApp/master/images/架构设计图.jpg
   [4]: https://www.pgyer.com/O35V
   [5]: https://github.com/xilou31/Dishes-OrderingSystem/blob/master/API%E6%8E%A5%E5%8F%A3/%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3.md
